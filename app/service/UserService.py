@@ -4,5 +4,6 @@ class UserService():
     def register(user: User):
         try:
             UserRepository.register(user)
-        catch(e):
+        except OperationalError as e:
+            print(e)
             
