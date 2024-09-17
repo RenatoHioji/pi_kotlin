@@ -1,10 +1,10 @@
 from tortoise import Tortoise
-class initDB():
-    async def init():
+
+class initDB:
+    @staticmethod
+    async def init(db_url, models):
         await Tortoise.init(
-            db_url = app.config['DATABASE_URL'],
-            modules = {
-                "models": ['models.User']
-            }
+            db_url=db_url,
+            modules={"models": models}
         )
-        
+        await Tortoise.generate_schemas()
