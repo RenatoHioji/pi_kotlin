@@ -4,6 +4,12 @@ from models.User import User
 from service.UserService import UserService
 from sqlalchemy.exc import IntegrityError
 class UserController():
+    @app.before_request
+        def check_auth():
+            routes = ['login', 'register', '/hello-world']
+            if "user_id" not in session and request.endpoint not in routes:
+                return {"error": "Usuário não está logado"}, 500
+            
     def init_app(app):
         @app.route("/hello-world", methods=["GET"])
         def helloWorld():
@@ -28,20 +34,12 @@ class UserController():
                 return jsonify(result), 500
             return jsonify({"message": f"Usuário cadastrados com sucesso"}), 201
             
-            
-            
-            
-            
-            
         @app.route("/login", methods=["POST"])
         def login():
             data = request.get_json()
             email = data.get("email")
             password = data.get("password")
-            if not email or not password:
-                return jsonify({"error": "Missing email or password"}), 400
-            try:
-                UserService.login(email, password)
-            except OperationalError as e:
-                return jsonify({"error": f"Failed to login with error {e}"}), 500
-
+            
+            if 'error' in result:
+                return jsonify(result), 500
+            return jsonify({"message": f"Usuário cadastrados com sucesso"}), 201
