@@ -1,23 +1,25 @@
 from flask import Flask
+import os
+from models.db import db
+from models.User import User
 from controllers.UserController import UserController
-from tortoise import run_async
-from models.db import initDB 
+    
+app = Flask(__name__, template_folder='views')
 
-app = Flask(__name__)
-app.config["DATABASE_URL"] = 'postgres://postgres:1234@localhost:5432/pi'
 UserController.init_app(app)
 
-async def setup():
-    await initDB.init(
-        db_url=app.config['DATABASE_URL'],
-        models=['models.User']
-    )
-    
-@app.before_first_request
-def before_first_request():
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(setup())
+app.config["SECRET_KEY"] = "secretnotthatsecret"
+app.config["PERMANENT_SESSIONLIFETIME"] = 3600
 
-if __name__ == "__main__":
-    run_async(initDB.init("postgres://postgres:1234@localhost:5432/pi", ))
-    app.run(port=4000, debug=True)
+dir = os.path.abspath(os.path.dirname(__file__))
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
+    os.path.join(dir, 'models/db.sqlite3')
+
+    
+if __name__ == '__main__':
+    db.init_app(app=app)
+    with app.test_request_context():
+        db.create_all()
+        User.seed_user()
+    app.run(host='localhost', port=4000, debug=True)
