@@ -1,16 +1,15 @@
-from flask import request, jsonify, abort
+from flask import request, jsonify, abort, session
 from utils.hash.password import hash_password, verify_password
 from models.User import User
 from service.UserService import UserService
 from sqlalchemy.exc import IntegrityError
 class UserController():
-    @app.before_request
+    def init_app(app):
+        @app.before_request
         def check_auth():
             routes = ['login', 'register', '/hello-world']
             if "user_id" not in session and request.endpoint not in routes:
                 return {"error": "Usuário não está logado"}, 500
-            
-    def init_app(app):
         @app.route("/hello-world", methods=["GET"])
         def helloWorld():
             return jsonify({"success": True, "message": "Hello World"}), 200
@@ -39,7 +38,7 @@ class UserController():
             data = request.get_json()
             email = data.get("email")
             password = data.get("password")
-            
+            user = User(email = email, password= password)
             result = UserService.login(user)
             
             if 'error' in result:

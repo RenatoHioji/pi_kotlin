@@ -17,6 +17,7 @@ class UserService():
     def login(user: User):
         try:
             userRegistered = UserRepository.findByEmail(user.email)
+            print("Senha", user.password)   
             if userRegistered and verify_password(userRegistered.password, user.password):
                 session['user_id'] = user.id
                 session['email'] = user.username

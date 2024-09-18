@@ -11,16 +11,15 @@ class User(db.Model):
     email = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     
-    def __init__(self, username, email, password=None):
+    def __init__(self, username=None, email=None, password=None):
         self.username = username
         self.email = email
-        if password:
-            self.password = generate_password_hash(password, method="scrypt")
+        self.password = password
     
     @staticmethod
     def seed_user():
         if not User.query.first():
-            user = User(username="admin", email="admin@example.com", password="admin")
+            user = User(username="admin", email="admin@example.com", password=generate_password_hash("admin", method="scrypt"))
             db.session.add(user)
             db.session.commit()
             print("Usuário adicionado com sucesso")

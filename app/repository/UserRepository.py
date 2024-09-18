@@ -18,7 +18,6 @@ class UserRepository():
             print("exception")
             raise
     def findByEmail(email: str):
-        try:
-            User.query.filter(email = email)
-            
+        user = User.query.filter_by(email = email).first()
+        return user
     
