@@ -1,6 +1,6 @@
 from models.User import User
 from repository.UserRepository import UserRepository
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, NoResultFound
 from utils.hash.password import verify_password
 from flask import session
 class UserService():
@@ -23,6 +23,8 @@ class UserService():
                 return {"message": "Usuário logado com sucesso"}
             else:
                 return {"error": "Usuário email e/ou senhas incorretas ou usuário inexistente"}
+        except NoResultFound as e:
+            return {"error": "Usuário não foi encontrado"}
             
             
                 

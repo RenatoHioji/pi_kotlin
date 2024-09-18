@@ -17,5 +17,8 @@ class UserRepository():
             db.session.rollback() 
             print("exception")
             raise
-
+    def findByEmail(email: str):
+        try:
+            User.query.filter(email = email)
+            
     

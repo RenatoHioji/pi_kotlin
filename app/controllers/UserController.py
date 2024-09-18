@@ -40,6 +40,8 @@ class UserController():
             email = data.get("email")
             password = data.get("password")
             
+            result = UserService.login(user)
+            
             if 'error' in result:
                 return jsonify(result), 500
-            return jsonify({"message": f"Usuário cadastrados com sucesso"}), 201
+            return jsonify(result), 201
