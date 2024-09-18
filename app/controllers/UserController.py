@@ -2,12 +2,12 @@ from flask import request, jsonify, abort
 from utils.hash.password import hash_password, verify_password
 from models.User import User
 from service.UserService import UserService
-
+from sqlalchemy.exc import IntegrityError
 class UserController():
     def init_app(app):
         @app.route("/hello-world", methods=["GET"])
         def helloWorld():
-            return jsonify({"success", "Hello World"}), 200
+            return jsonify({"success": True, "message": "Hello World"}), 200
         
         @app.route("/register", methods=["POST"])
         def register():
@@ -16,24 +16,32 @@ class UserController():
             email = data.get("email")
             password = data.get("password")
             if not username or not email or not password:
-                return jsonify({"error": "Missing required fields"}), 400
+                return jsonify({"error": "Alguns campos estão faltando"}), 400
+                
             hashed_password = hash_password(password)
-            try:
-                user = User(username, email, hashed_password)
-                registeredUser = UserService.register(user)
-                if(registeredUser):
-                    return jsonify({"message": "User registered successfully"}), 201
-            except OperationalError as e:
-                return jsonify({"error": "Couldn't create user with this info"}), 400
+                
+            user = User(username, email, hashed_password)
+                
+            result = UserService.register(user)
+                
+            if 'error' in result:
+                return jsonify(result), 500
+            return jsonify({"message": f"Usuário cadastrados com sucesso"}), 201
+            
+            
+            
+            
+            
+            
         @app.route("/login", methods=["POST"])
         def login():
             data = request.get_json()
             email = data.get("email")
             password = data.get("password")
             if not email or not password:
-                return jsonify({"error": "Missing email or password"})
+                return jsonify({"error": "Missing email or password"}), 400
             try:
                 UserService.login(email, password)
             except OperationalError as e:
-                return jsonify({"error": f"Failed to login with error {e}"})
+                return jsonify({"error": f"Failed to login with error {e}"}), 500
 
