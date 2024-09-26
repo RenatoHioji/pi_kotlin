@@ -2,7 +2,7 @@ import uuid
 from sqlalchemy.dialects.postgresql import UUID
 from werkzeug.security import generate_password_hash
 from .db import db
-
+from sqlalchemy.orm import relationship
 class User(db.Model):
     __tablename__ = 'user'
     
@@ -10,7 +10,8 @@ class User(db.Model):
     username = db.Column(db.String(255), unique=True, nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
-    
+    items = relationship("Item", back_populates="user", cascade="all, delete-orphan")
+         
     def __init__(self, username=None, email=None, password=None):
         self.username = username
         self.email = email
