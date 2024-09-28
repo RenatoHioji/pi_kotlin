@@ -1,34 +1,25 @@
 from models.User import User
 from repository.UserRepository import UserRepository
-from sqlalchemy.exc import IntegrityError, NoResultFound
 from utils.hash.password import verify_password
-from flask import session
+from flask import session, abort
+from uuid import UUID
 class UserService():
     def register(user: User):
-        try:
-            UserRepository.register(user)
-            return {"message": "Usuário cadastrado com sucesso"}
-        except IntegrityError as e:
-            return {"error": "Usuário com esse email ou senha já existe"}
-        
-        except Exception as e:
-            return {"error": f"{e}"}
-    
+        UserRepository.register(user)
     def login(user: User):
-        try:
-            userRegistered = UserRepository.findByEmail(user.email)
-            print("Senha", user.password)   
-            if userRegistered and verify_password(userRegistered.password, user.password):
-                session['user_id'] = user.id
-                session['email'] = user.username
-                return {"message": "Usuário logado com sucesso"}
-            else:
-                return {"error": "Usuário email e/ou senhas incorretas ou usuário inexistente"}
-        except NoResultFound as e:
-            return {"error": "Usuário não foi encontrado"}
-            
-            
+        userRegistered = UserRepository.findByEmail(user.email)
+        if userRegistered and verify_password(userRegistered.password, user.password):
+            session['user_id'] = user.id
+            session['email'] = user.username
+            return 
+        else:
+            abort(404, description = "Usuário email e/ou senhas incorretas ou usuário inexistente")
                 
+    def findUserHistory(user_id: UUID):
+        history = UserRepository.findUserHistory(user_id).get_history()
+        if not history:
+                abort(404, description = "Histórico não foi encontrado")
+        return history
                 
                      
         

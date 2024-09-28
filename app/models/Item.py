@@ -16,8 +16,9 @@ class Item(db.Model):
     audio = db.Column(db.String(255), unique = False, nullable = False)
     category = db.Column(db.String(255), unique = True, nullable = True)
     subcategory = db.Column(db.String(255), unique = True, nullable= True)   
-    user_id = db.Column(UUID(as_uuid=True), ForeignKey("user.id"), nullable=False)
-    user = relationship("User", back_populates="items")
+    
+    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey("user.id"), nullable=False)
+    
     
     def __init__(self, name: str, syllables: str, img: str, audio: str, category: Optional[str] = None, subcategory: Optional[str] = None):
         self.name = name

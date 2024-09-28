@@ -1,7 +1,7 @@
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
 from werkzeug.security import generate_password_hash
-from .db import db
+from .db import db, user_history
 from sqlalchemy.orm import relationship
 class User(db.Model):
     __tablename__ = 'user'
@@ -10,12 +10,17 @@ class User(db.Model):
     username = db.Column(db.String(255), unique=True, nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
-    items = relationship("Item", back_populates="user", cascade="all, delete-orphan")
-         
+    my_items = db.relationship("Item", backref="author", lazy=True)
+    item_history = db.relationship("Item", secondary=user_history, lazy='subquery', backref=db.backref("users", lazy=True))
+    
+    
     def __init__(self, username=None, email=None, password=None):
         self.username = username
         self.email = email
         self.password = password
+    
+    def get_history(self):
+        return self.item_history
     
     @staticmethod
     def seed_user():
@@ -25,4 +30,4 @@ class User(db.Model):
             db.session.commit()
             print("Usuário adicionado com sucesso")
         else:
-            print("Usuários já existentes")
+            pass

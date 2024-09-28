@@ -4,13 +4,13 @@ from models.db import db
 from models.User import User
 from controllers.UserController import UserController
 from controllers.ItemController import ItemController
-
+from controllers.ControllerAdvice import ControllerAdvice
 app = Flask(__name__, template_folder='views')
 
 
 UserController.init_app(app)
 ItemController.init_app(app)
-
+ControllerAdvice.init_app(app)
 app.config["SECRET_KEY"] = "secretnotthatsecret"
 app.config["PERMANENT_SESSIONLIFETIME"] = 3600
 
