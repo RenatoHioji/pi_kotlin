@@ -22,6 +22,13 @@ class User(db.Model):
     def get_history(self):
         return self.item_history
     
+    def get_profile(self):
+        return {
+            "username": self.username,
+            "email": self.email,
+            "my_items": self.my_items
+        }
+    
     @staticmethod
     def seed_user():
         if not User.query.first():

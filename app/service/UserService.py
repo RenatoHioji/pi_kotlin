@@ -16,11 +16,26 @@ class UserService():
             abort(404, description = "Usuário email e/ou senhas incorretas ou usuário inexistente")
                 
     def findUserHistory(user_id: UUID):
-        history = UserRepository.findUserHistory(user_id).get_history()
+        history = UserRepository.findUserById(user_id).get_history()
         if not history:
-                abort(404, description = "Histórico não foi encontrado")
+            abort(404, description = "Histórico não foi encontrado")
         return history
                 
-                     
+    def findUserById(user_id: UUID):
+        user = UserRepository.findUserById(user_id)
+        if not user:
+            abort(404, description = "Usuário não foi encontrado")
+        return user.get_profile()
+    
+    def updateUser(user: User, user_id: UUID):
+        oldUser = UserRepository.findUserById(user_id)
+        print(user.email)
+        oldUser.email = user.email
+        oldUser.password = user.password
+        oldUser.username = user.username
+        print(oldUser.email)
+        UserRepository.updateUser(oldUser)
+        return 
+    
         
             

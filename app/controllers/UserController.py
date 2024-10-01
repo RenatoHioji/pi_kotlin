@@ -11,7 +11,7 @@ class UserController():
     def init_app(app):
         @app.before_request
         def check_auth():
-            routes = ['login', 'register', '/hello-world']
+            routes = ['login', 'register', '/hello-world', '/']
             if "user_id" not in session and request.endpoint not in routes:
                 abort(500, description="Usuário não está logado")
 
@@ -41,14 +41,49 @@ class UserController():
             result = UserService.login(user)
             return jsonify({"message": "Usuário logado com sucesso!"}), 200   
         
-        @app.route(f"/user/recents/<string:user_id>", methods=["GET"])
-        def findUserHistory(user_id: str):
-            if not user_id:
+        @app.route("/user/recents/<string:id>", methods=["GET"])
+        def findUserHistory(id: str):
+            if not id:
                 abort(400, "Id de usuário não foi enviado")
             try:
-                id = uuid.UUID(user_id)
+                user_id = uuid.UUID(id)
             except Exception as e:
                 abort(400, "Id de usuário não pode ser transformado em UUID")
-            history = UserService.findUserHistory(id)
+            history = UserService.findUserHistory(user_id)
             return jsonify({"message": "Histórico de itens encontrados com sucesso", "history": history}), 200
+        
+        @app.route("/user/<string:id>", methods=["GET"])
+        def findUserById(id: str):
+            if not id:
+                abort(400, "Id de usuário nao foi enviado")
+            try:
+                user_id = uuid.UUID(id)
+            except Exception as e:
+                abort(400, "Id de usuário não pode ser transformado em UUID")
+            user = UserService.findUserById(user_id)
+            return jsonify({"message": "Usuário encontrado com sucesso", "user": user}), 200           
+
+        @app.route("/user/<string:id>", methods=["PUT"])
+        def updateUser(id: str):
+            data = request.get_json()
+            username = data.get("username")
+            email = data.get("email")
+            password = data.get("password")
+            if not id:
+                abort(400, "Id de usuário nao foi enviado")
+            try:
+                user_id = uuid.UUID(id)
+            except Exception as e:
+                abort(400, "Id de usuário não pode ser transformado em UUID")
+            if not username or not email or not password:
+                abort(400, description="Usuário, email ou senha estão faltando")
+            hashed_password = hash_password(password)
+            user = User(username, email, hashed_password)
+            UserService.updateUser(user, user_id)
+            return jsonify({"message": "Usuário atualizado com sucesso"}), 200
+            
+            
+        @app.route("/user/<string:user_id>", methods=["DELETE"])
+        def deleteUser(user_id: str):
+            pass
         

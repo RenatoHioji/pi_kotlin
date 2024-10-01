@@ -27,10 +27,19 @@ class UserRepository():
             abort(500, description=f"Erro na query: {e}")
         return user
     
-    def findUserHistory(user_id: UUID):
+    def findUserById(user_id: UUID):
         try:
             history = User.query.filter_by(id = user_id).first()
-            print(history)
             return history
+        except Exception as e:
+            abort(500, description = f"Erro na query: {e}")
+    
+    def updateUser(user: User):
+        try:
+            db.session.commit()
+            return
+        except IntegrityError as e:
+            db.session.rollback() 
+            abort(500, description = "Usuário já cadastrado")
         except Exception as e:
             abort(500, description = f"Erro na query: {e}")
