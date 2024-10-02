@@ -1,2 +1,3 @@
 venv
 app/models/db.sqlite3
+__pycache__/
