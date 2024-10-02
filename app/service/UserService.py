@@ -37,5 +37,6 @@ class UserService():
         UserRepository.updateUser(oldUser)
         return 
     
-        
-            
+    def delete(user_id: UUID):
+        user = UserRepository.findUserById(user_id)
+        return UserRepository.delete(user)

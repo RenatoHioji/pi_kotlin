@@ -43,3 +43,11 @@ class UserRepository():
             abort(500, description = "Usuário já cadastrado")
         except Exception as e:
             abort(500, description = f"Erro na query: {e}")
+    def delete(user: User):
+        try:
+            db.session.delete(user)
+            db.session.commit()
+            return
+        except Exception as e:
+            db.session.rollback()
+            abort(500, description = f"Erro na query: {e}")

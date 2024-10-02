@@ -82,8 +82,13 @@ class UserController():
             UserService.updateUser(user, user_id)
             return jsonify({"message": "Usuário atualizado com sucesso"}), 200
             
-            
-        @app.route("/user/<string:user_id>", methods=["DELETE"])
-        def deleteUser(user_id: str):
-            pass
-        
+        @app.route("/user/<string:id>", methods=["DELETE"])
+        def deleteUser(id: str):
+            if not id:
+                abort(400, "Id de usuário não foi enviado")
+            try:
+                user_id = uuid.UUID(id)
+            except Exception as e:
+                abort(400, "Id de usuário não pode ser transformado em UUID")
+            UserService.delete(user_id)
+            return jsonify({"message": "Usuário deletado com sucesso"}), 204
