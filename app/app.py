@@ -5,7 +5,7 @@ from models.User import User
 from controllers.UserController import UserController
 from controllers.ItemController import ItemController
 from controllers.ControllerAdvice import ControllerAdvice
-app = Flask(__name__, template_folder='views')
+app = Flask(__name__)
 
 
 UserController.init_app(app)

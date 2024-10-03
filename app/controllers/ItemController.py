@@ -7,13 +7,19 @@ import uuid
 
 class ItemController():
     def init_app(app):
-        route = "item"
-        @app.route(f"/{route}", methods=["GET"])
-        def findAllItems():
+        @app.route("/item", methods=["GET"])
+        def findAll():
             items = ItemService.findAll()
-            if 'error' in items:
-                return jsonify(
-                    items
-                ), 500
             return jsonify({"message": "Itens encontrados com sucesso", "items": items}), 200
         
+        @app.route("/item", methods=["POST"])
+        def save():
+            data = request.get_json()
+            files = request.files
+            
+            if 'image' not in files:
+                abort(404, description="Imagem não foi enviada.")
+            if 'video' not in files:
+                abort(404, description = "Vídeo não foi enviado.")
+            
+            return jsonify("message": "Arquivos enviados com sucesso!")
