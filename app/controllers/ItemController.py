@@ -22,4 +22,4 @@ class ItemController():
             if 'video' not in files:
                 abort(404, description = "Vídeo não foi enviado.")
             
-            return jsonify("message": "Arquivos enviados com sucesso!")
+            return jsonify({"message": "Arquivos enviados com sucesso!"})
