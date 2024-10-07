@@ -1,3 +1,4 @@
 venv
-app/models/db.sqlite3
+/app/models/db.sqlite3
 __pycache__/
+
