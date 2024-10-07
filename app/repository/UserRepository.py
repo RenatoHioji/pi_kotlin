@@ -4,6 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from flask import abort
 from uuid import UUID
 import uuid
+from sqlalchemy.exc import SQLAlchemyError
 
 class UserRepository():
     def register(user: User):
@@ -14,7 +15,7 @@ class UserRepository():
         except IntegrityError as e:
             db.session.rollback() 
             abort(500, description = "Usuário já cadastrado")
-        except Exception as e:
+        except SQLAlchemyError as e:
             db.session.rollback() 
             abort(500, description = f"Exception: {e}")
         
@@ -23,7 +24,7 @@ class UserRepository():
             user = User.query.filter_by(email = email).first()
             if not user:
                 abort(404, description = "Usuário não foi encontrado")
-        except Exception as e:
+        except SQLAlchemyError as e:
             abort(500, description=f"Erro na query: {e}")
         return user
     
@@ -31,7 +32,7 @@ class UserRepository():
         try:
             history = User.query.filter_by(id = user_id).first()
             return history
-        except Exception as e:
+        except SQLAlchemyError as e:
             abort(500, description = f"Erro na query: {e}")
     
     def updateUser(user: User):
@@ -41,13 +42,13 @@ class UserRepository():
         except IntegrityError as e:
             db.session.rollback() 
             abort(500, description = "Usuário já cadastrado")
-        except Exception as e:
+        except SQLAlchemyError as e:
             abort(500, description = f"Erro na query: {e}")
     def delete(user: User):
         try:
             db.session.delete(user)
             db.session.commit()
             return
-        except Exception as e:
+        except SQLAlchemyError as e:
             db.session.rollback()
             abort(500, description = f"Erro na query: {e}")
