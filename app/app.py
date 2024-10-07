@@ -7,6 +7,11 @@ from controllers.ItemController import ItemController
 from controllers.ControllerAdvice import ControllerAdvice
 app = Flask(__name__)
 
+UPLOAD_IMAGE = "/uploads/image"
+UPLOAD_VIDEO = "/uploads/video"
+
+app.config["UPLOAD_IMAGE"] = UPLOAD_IMAGE
+app.config["UPLOAD_VIDEO"] = UPLOAD_VIDEO
 
 UserController.init_app(app)
 ItemController.init_app(app)
