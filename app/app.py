@@ -5,7 +5,10 @@ from models.User import User
 from controllers.UserController import UserController
 from controllers.ItemController import ItemController
 from controllers.ControllerAdvice import ControllerAdvice
+from flask_cors import CORS
+
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "http://localhost:8081"}})
 
 UPLOAD_IMAGE = "/uploads/image"
 UPLOAD_VIDEO = "/uploads/video"

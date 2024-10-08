@@ -32,4 +32,4 @@ class ItemController():
         def allowed_file(filename):
             ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "mp3", "mp4"}
             return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-            
+        
