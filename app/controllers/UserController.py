@@ -13,6 +13,7 @@ class UserController():
         def check_auth():
             routes = ['login', 'register', '/hello-world', '/']
             if "user_id" not in session and request.endpoint not in routes:
+                print(request.endpoint)
                 abort(500, description="Usuário não está logado")
 
         @app.route("/hello-world", methods=["GET"])
