@@ -2,7 +2,6 @@ from flask import request, jsonify, abort, session
 from utils.hash.password import hash_password, verify_password
 from models.User import User
 from service.UserService import UserService
-from sqlalchemy.exc import IntegrityError
 from uuid import UUID
 import uuid
 

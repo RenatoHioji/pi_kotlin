@@ -13,7 +13,6 @@ class User(db.Model):
     my_items = db.relationship("Item", backref="author", lazy=True)
     item_history = db.relationship("Item", secondary=user_history, lazy='subquery', backref=db.backref("users", lazy=True))
     
-    
     def __init__(self, username=None, email=None, password=None):
         self.username = username
         self.email = email
