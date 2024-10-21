@@ -7,14 +7,13 @@ from controllers.ItemController import ItemController
 from controllers.ControllerAdvice import ControllerAdvice
 from flask_cors import CORS
 from dotenv import load_dotenv
+from flask_marshmallow import Marshmallow
 
 load_dotenv()
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:8081"}})
+ma = Marshmallow(app)
 
-UserController.init_app(app)
-ItemController.init_app(app)
-ControllerAdvice.init_app(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:8081"}})
 
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
 app.config["PERMANENT_SESSIONLIFETIME"] = os.environ.get("PERMANENT_SESSIONLIFETIME")
@@ -27,6 +26,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
     
 if __name__ == '__main__':
     db.init_app(app=app)
+    UserController.init_app(app)
+    ItemController.init_app(app)
+    ControllerAdvice.init_app(app)
     with app.test_request_context():
         db.create_all()
         User.seed_user()

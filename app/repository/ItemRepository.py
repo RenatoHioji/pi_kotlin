@@ -6,8 +6,8 @@ from models.db import db
 class ItemRepository():
     def findAll():
         try:
-            item = Item.query.all()
-            if not item:
+            items = Item.query.all()
+            if not items:
                 abort(404, description = "Não foi possível encontrar um item")
         except SQLAlchemyError as e:
             abort(500, description= f"falha na query: {e}")

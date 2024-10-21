@@ -9,10 +9,13 @@ from flask import abort
 from utils.s3 import bucket_pi_accessing
 from models.Item import Item
 import io
+from schemas.ItemSchema import ItemSchema
 
 class ItemService():
     def findAll():
-        return ItemRepository.findAll()
+        items = ItemRepository.findAll()
+        item = ItemSchema(many=True)
+        return item.jsonify(items)
     
     def save(self, name, syllables, img, video, category, subcategory):
         image_url, video_url =self.file_verification(img, video)
@@ -25,7 +28,7 @@ class ItemService():
             video_name = self.upload_video(video, secure_filename(video.filename))
             return image_name, video_name
         else:
-            abort(400, "Video ou imagem foi enviado com uma extensão proibída")
+            abort(400, description="Video ou imagem foi enviado com uma extensão proibída")
             
     def allowed_file(self, filename):
         ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "mp3", "mp4"}

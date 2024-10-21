@@ -1,5 +1,6 @@
 from app import ma
-from flask_marshnallow import Schema, fields
+from flask_marshmallow import Schema, fields
+
 class ItemSchema(ma.Schema):
     class Meta:
         name = fields.Str(required = True)
