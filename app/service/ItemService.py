@@ -9,13 +9,14 @@ from flask import abort
 from utils.s3 import bucket_pi_accessing
 from models.Item import Item
 import io
-from schemas.ItemSchema import ItemSchema
 
 class ItemService():
     def findAll():
+        item_list = []
         items = ItemRepository.findAll()
-        item = ItemSchema(many=True)
-        return item.jsonify(items)
+        for item in items:
+            item_list.append(item.serialize())
+        return item_list
     
     def save(self, name, syllables, img, video, category, subcategory):
         image_url, video_url =self.file_verification(img, video)

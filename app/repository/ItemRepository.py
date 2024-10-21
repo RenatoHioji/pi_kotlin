@@ -9,6 +9,7 @@ class ItemRepository():
             items = Item.query.all()
             if not items:
                 abort(404, description = "Não foi possível encontrar um item")
+            return items
         except SQLAlchemyError as e:
             abort(500, description= f"falha na query: {e}")
     def save(item: Item):

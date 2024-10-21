@@ -28,6 +28,15 @@ class Item(db.Model):
         self.category = category
         self.subcategory = subcategory
     
+    def serialize(item):
+        return {
+            "name": item.name,
+            "syllables": item.syllables,
+            "img": item.img,
+            "video": item.video,
+            "category": item.category,
+            "subcategory": item.subcategory
+        }
     @staticmethod
     def seed_item():
         if not Item.query.first():
