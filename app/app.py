@@ -7,19 +7,18 @@ from controllers.ItemController import ItemController
 from controllers.ControllerAdvice import ControllerAdvice
 from flask_cors import CORS
 from dotenv import load_dotenv
-from flask_marshmallow import Marshmallow
 
 load_dotenv()
 app = Flask(__name__)
-ma = Marshmallow(app)
+
 
 CORS(app, resources={r"/*": {"origins": "http://localhost:8081"}})
 
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
 app.config["PERMANENT_SESSIONLIFETIME"] = os.environ.get("PERMANENT_SESSIONLIFETIME")
 
-dir = os.path.abspath(os.path.dirname(__file__))
 
+dir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
     os.path.join(dir, 'models/db.sqlite3')
 
