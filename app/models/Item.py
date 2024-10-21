@@ -14,8 +14,8 @@ class Item(db.Model):
     syllables = db.Column(db.String(255), nullable = False)
     img = db.Column(db.String(255), unique=False, nullable=False)
     video = db.Column(db.String(255), unique = False, nullable = False)
-    category = db.Column(db.String(255), unique = True, nullable = True)
-    subcategory = db.Column(db.String(255), unique = True, nullable= True)   
+    category = db.Column(db.String(255), unique = False, nullable = True)
+    subcategory = db.Column(db.String(255), unique = False, nullable= True)   
     
     user_id = db.Column(UUID(as_uuid=True), db.ForeignKey("user.id"), nullable=True)
     
