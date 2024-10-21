@@ -6,21 +6,18 @@ from controllers.UserController import UserController
 from controllers.ItemController import ItemController
 from controllers.ControllerAdvice import ControllerAdvice
 from flask_cors import CORS
+from dotenv import load_dotenv
 
+load_dotenv()
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:8081"}})
-
-UPLOAD_IMAGE = "/uploads/image"
-UPLOAD_VIDEO = "/uploads/video"
-
-app.config["UPLOAD_IMAGE"] = UPLOAD_IMAGE
-app.config["UPLOAD_VIDEO"] = UPLOAD_VIDEO
 
 UserController.init_app(app)
 ItemController.init_app(app)
 ControllerAdvice.init_app(app)
-app.config["SECRET_KEY"] = "secretnotthatsecret"
-app.config["PERMANENT_SESSIONLIFETIME"] = 3600
+
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
+app.config["PERMANENT_SESSIONLIFETIME"] = os.environ.get("PERMANENT_SESSIONLIFETIME")
 
 dir = os.path.abspath(os.path.dirname(__file__))
 
