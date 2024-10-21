@@ -17,7 +17,7 @@ class Item(db.Model):
     category = db.Column(db.String(255), unique = True, nullable = True)
     subcategory = db.Column(db.String(255), unique = True, nullable= True)   
     
-    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey("user.id"), nullable=False)
+    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey("user.id"), nullable=True)
     
     
     def __init__(self, name: str, syllables: str, img: str, video: str, category: Optional[str] = None, subcategory: Optional[str] = None):
