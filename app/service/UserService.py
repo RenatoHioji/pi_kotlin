@@ -29,11 +29,9 @@ class UserService():
     
     def updateUser(user: User, user_id: UUID):
         oldUser = UserRepository.findUserById(user_id)
-        print(user.email)
         oldUser.email = user.email
         oldUser.password = user.password
         oldUser.username = user.username
-        print(oldUser.email)
         UserRepository.updateUser(oldUser)
         return 
     

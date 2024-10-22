@@ -22,6 +22,11 @@ class ItemService():
         image_url, video_url =self.file_verification(img, video)
         item = Item(name, syllables, image_url, video_url, category, subcategory)
         return ItemRepository.save(item)
+
+    def findById(self, id):
+        item = ItemRepository.findById(id)
+        return item
+        
         
     def file_verification(self, image, video):
         if self.allowed_file(image.filename) and self.allowed_file(video.filename):
