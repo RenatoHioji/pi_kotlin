@@ -1,11 +1,7 @@
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
-from werkzeug.security import generate_password_hash
 from .db import db
 from typing import Optional
-from sqlalchemy.orm import relationship
-from sqlalchemy.orm import mapped_column
-from sqlalchemy import ForeignKey
 class Item(db.Model):
     __tablename__ = 'item'
     
@@ -30,6 +26,7 @@ class Item(db.Model):
     
     def serialize(item):
         return {
+            "id": item.id,
             "name": item.name,
             "syllables": item.syllables,
             "img": item.img,

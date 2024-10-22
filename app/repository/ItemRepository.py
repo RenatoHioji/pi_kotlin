@@ -16,4 +16,19 @@ class ItemRepository():
         db.session.add(item)
         db.session.commit()
         return item
-            
+    
+    def findById(id: UUID):
+        item = Item.query.filter_by(id=id).first()
+        if not item:
+            abort(404, description="Item com o ID informado não foi encontrado")
+        return item
+
+    def delete(item: Item):
+        try:
+            db.session.delete(item)
+            db.session.commit()
+            return
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            abort(500, description = f"Erro na query: {e}")
+    

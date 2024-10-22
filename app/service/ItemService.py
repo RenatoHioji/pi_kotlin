@@ -22,6 +22,12 @@ class ItemService():
         image_url, video_url =self.file_verification(img, video)
         item = Item(name, syllables, image_url, video_url, category, subcategory)
         return ItemRepository.save(item)
+
+    def delete(self, id:UUID):
+        item = ItemRepository.findById(id)
+        bucket_pi_accessing.deleteFile(item.img )
+        bucket_pi_accessing.deleteFile(item.video)
+        ItemRepository.delete(item)
         
     def file_verification(self, image, video):
         if self.allowed_file(image.filename) and self.allowed_file(video.filename):

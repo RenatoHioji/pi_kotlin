@@ -1,5 +1,6 @@
 from flask import request, jsonify, abort
 from service.ItemService import ItemService
+import uuid
 class ItemController():
     def init_app(app):
         item_service = ItemService()
@@ -22,3 +23,14 @@ class ItemController():
                 
             item_service.save(data["name"], data["syllables"], files["image"], files["video"], data["category"], data["subcategory"])
             return jsonify({"message" : "Item salvo com sucesso!"}), 201
+        
+        @app.route("/item/<string:id>", methods=["DELETE"])
+        def delete(id: str):
+            if not id:
+                abort(400, description="ID não enviado")
+            try:
+                item_id = uuid.UUID(id) 
+            except Exception as e:
+                abort(400, description="Id de item não pode ser transformado em UUID")
+            item_service.delete(item_id)
+            return jsonify({"message": "Item deletado com sucesso"}), 204
