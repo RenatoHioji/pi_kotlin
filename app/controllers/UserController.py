@@ -44,22 +44,22 @@ class UserController():
         @app.route("/user/recents/<string:id>", methods=["GET"])
         def findUserHistory(id: str):
             if not id:
-                abort(400, "Id de usuário não foi enviado")
+                abort(400, description="Id de usuário não foi enviado")
             try:
                 user_id = uuid.UUID(id)
             except Exception as e:
-                abort(400, "Id de usuário não pode ser transformado em UUID")
+                abort(400, description="Id de usuário não pode ser transformado em UUID")
             history = UserService.findUserHistory(user_id)
             return jsonify({"message": "Histórico de itens encontrados com sucesso", "history": history}), 200
         
         @app.route("/user/<string:id>", methods=["GET"])
         def findUserById(id: str):
             if not id:
-                abort(400, "Id de usuário nao foi enviado")
+                abort(400, description="Id de usuário nao foi enviado")
             try:
                 user_id = uuid.UUID(id)
             except Exception as e:
-                abort(400, "Id de usuário não pode ser transformado em UUID")
+                abort(400, description="Id de usuário não pode ser transformado em UUID")
             user = UserService.findUserById(user_id)
             return jsonify({"message": "Usuário encontrado com sucesso", "user": user}), 200           
 
@@ -74,7 +74,7 @@ class UserController():
             try:
                 user_id = uuid.UUID(id)
             except Exception as e:
-                abort(400, "Id de usuário não pode ser transformado em UUID")
+                abort(400, description="Id de usuário não pode ser transformado em UUID")
             if not username or not email or not password:
                 abort(400, description="Usuário, email ou senha estão faltando")
             hashed_password = hash_password(password)
@@ -85,10 +85,10 @@ class UserController():
         @app.route("/user/<string:id>", methods=["DELETE"])
         def deleteUser(id: str):
             if not id:
-                abort(400, "Id de usuário não foi enviado")
+                abort(400, description="Id de usuário não foi enviado")
             try:
                 user_id = uuid.UUID(id)
             except Exception as e:
-                abort(400, "Id de usuário não pode ser transformado em UUID")
+                abort(400, description="Id de usuário não pode ser transformado em UUID")
             UserService.delete(user_id)
             return jsonify({"message": "Usuário deletado com sucesso"}), 204
