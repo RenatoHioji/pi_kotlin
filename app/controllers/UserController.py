@@ -4,7 +4,7 @@ from models.User import User
 from service.UserService import UserService
 from uuid import UUID
 import uuid
-
+from utils.id_converter import id_converter
 
 class UserController():
     def init_app(app):
@@ -43,23 +43,13 @@ class UserController():
         
         @app.route("/user/recents/<string:id>", methods=["GET"])
         def findUserHistory(id: str):
-            if not id:
-                abort(400, description="Id de usuário não foi enviado")
-            try:
-                user_id = uuid.UUID(id)
-            except Exception as e:
-                abort(400, description="Id de usuário não pode ser transformado em UUID")
+            user_id = id_converter.convert_id_uuid(id)
             history = UserService.findUserHistory(user_id)
             return jsonify({"message": "Histórico de itens encontrados com sucesso", "history": history}), 200
         
         @app.route("/user/<string:id>", methods=["GET"])
         def findUserById(id: str):
-            if not id:
-                abort(400, description="Id de usuário nao foi enviado")
-            try:
-                user_id = uuid.UUID(id)
-            except Exception as e:
-                abort(400, description="Id de usuário não pode ser transformado em UUID")
+            user_id = id_converter.convert_id_uuid(id)
             user = UserService.findUserById(user_id)
             return jsonify({"message": "Usuário encontrado com sucesso", "user": user}), 200           
 
@@ -69,12 +59,8 @@ class UserController():
             username = data.get("username")
             email = data.get("email")
             password = data.get("password")
-            if not id:
-                abort(400, "Id de usuário nao foi enviado")
-            try:
-                user_id = uuid.UUID(id)
-            except Exception as e:
-                abort(400, description="Id de usuário não pode ser transformado em UUID")
+            user_id = id_converter.convert_id_uuid(id)
+           
             if not username or not email or not password:
                 abort(400, description="Usuário, email ou senha estão faltando")
             hashed_password = hash_password(password)
@@ -84,11 +70,13 @@ class UserController():
             
         @app.route("/user/<string:id>", methods=["DELETE"])
         def deleteUser(id: str):
-            if not id:
-                abort(400, description="Id de usuário não foi enviado")
-            try:
-                user_id = uuid.UUID(id)
-            except Exception as e:
-                abort(400, description="Id de usuário não pode ser transformado em UUID")
+            user_id = id_converter.convert_id_uuid(id)
             UserService.delete(user_id)
             return jsonify({"message": "Usuário deletado com sucesso"}), 204
+        
+        @app.route("/user/<string:id>/items", methods = ["GET"])
+        def my_items(id: str ):
+            user_id = id_converter.convert_id_uuid(id)
+            userItems = UserService.findUserItems(user_id)
+            return jsonify({"message": "Itens encontrados com sucesso", "items": userItems})
+            

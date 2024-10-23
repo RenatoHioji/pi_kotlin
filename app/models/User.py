@@ -11,6 +11,7 @@ class User(db.Model):
     email = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     my_items = db.relationship("Item", backref="author", lazy=True)
+    
     item_history = db.relationship("Item", secondary=user_history, lazy='subquery', backref=db.backref("users", lazy=True))
     
     def __init__(self, username=None, email=None, password=None):
@@ -27,7 +28,11 @@ class User(db.Model):
             "email": self.email,
             "my_items": self.my_items
         }
-    
+    def get_items(self):
+        list_items= []
+        for item in self.my_items:
+            list_items.append(item.serialize())
+        return list_items
     @staticmethod
     def seed_user():
         if not User.query.first():

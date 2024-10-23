@@ -16,13 +16,14 @@ class Item(db.Model):
     user_id = db.Column(UUID(as_uuid=True), db.ForeignKey("user.id"), nullable=True)
     
     
-    def __init__(self, name: str, syllables: str, img: str, video: str, category: Optional[str] = None, subcategory: Optional[str] = None):
+    def __init__(self, name: str, syllables: str, img: str, video: str, category: Optional[str] = None, subcategory: Optional[str] = None, user_id: Optional[str] = None):
         self.name = name
         self.syllables = syllables
         self.img = img
         self.video = video
         self.category = category
         self.subcategory = subcategory
+        self.user_id = user_id
     
     def serialize(item):
         return {
