@@ -41,12 +41,6 @@ class UserController():
             result = UserService.login(user)
             return jsonify({"message": "Usuário logado com sucesso!"}), 200   
         
-        @app.route("/user/recents/<string:id>", methods=["GET"])
-        def findUserHistory(id: str):
-            user_id = id_converter.convert_id_uuid(id)
-            history = UserService.findUserHistory(user_id)
-            return jsonify({"message": "Histórico de itens encontrados com sucesso", "history": history}), 200
-        
         @app.route("/user/<string:id>", methods=["GET"])
         def findUserById(id: str):
             user_id = id_converter.convert_id_uuid(id)
@@ -74,9 +68,20 @@ class UserController():
             UserService.delete(user_id)
             return jsonify({"message": "Usuário deletado com sucesso"}), 204
         
+        @app.route("/user/<string:id>/recents", methods=["GET"])
+        def find_user_history(id: str):
+            user_id = id_converter.convert_id_uuid(id)
+            history = UserService.findUserHistory(user_id)
+            return jsonify({"message": "Histórico de itens encontrados com sucesso", "history": history}), 200
+    
         @app.route("/user/<string:id>/items", methods = ["GET"])
         def my_items(id: str ):
             user_id = id_converter.convert_id_uuid(id)
             userItems = UserService.findUserItems(user_id)
             return jsonify({"message": "Itens encontrados com sucesso", "items": userItems})
-            
+        
+        @app.route("/user/<string:id>/more_viewed", methods = ["GET"])
+        def find_more_view_by_user(id: str):
+            user_id = id_converter.convert_id_uuid(id)
+            more_view_items = UserService.find_more_view_items(user_id)
+            return jsonify({"message": "Items mais vistos encontrados", "items": more_view_items})

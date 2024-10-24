@@ -20,7 +20,10 @@ class User(db.Model):
         self.password = password
     
     def get_history(self):
-        return self.item_history
+        history = []
+        for item in self.item_history:
+            history.append(item.serialize())
+        return history
     
     def get_profile(self):
         return {
