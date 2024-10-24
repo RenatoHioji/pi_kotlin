@@ -67,7 +67,7 @@ class ItemService():
             abort(400, description="Video ou imagem foi enviado com uma extensão proibída")
             
     def allowed_file(self, filename):
-        ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "mp3", "mp4"}
+        ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg","jfif", "mp3", "mp4"}
         return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
     def convert_to_webp_and_save(self, image, filename):
@@ -78,7 +78,7 @@ class ItemService():
         buffer = io.BytesIO()
         if extension.lower() == "png":
             img.save(buffer, "webp", lossless=True)
-        elif extension.lower() in ["jpg", "jpeg"]:
+        elif extension.lower() in ["jpg", "jpeg", "jfif"]:
             img.save(buffer, "webp", quality=85)
         buffer.seek(0)
         bucket_pi_accessing.saveFile(buffer, new_filename)
