@@ -2,7 +2,7 @@ from models.Item import Item
 from uuid import UUID
 from flask import abort
 from sqlalchemy.exc import SQLAlchemyError
-from models.db import db
+from models.db import db, user_history
 class ItemRepository():
     def findAll():
         try:
@@ -32,3 +32,14 @@ class ItemRepository():
             db.session.rollback()
             abort(500, description = f"Erro na query: {e}")
     
+    def update(item: Item):
+        try:
+            db.session.commit()
+            return
+        except SQLAlchemyError as e:
+            abort(500, description = f"Erro na query: {e}")
+    def addUserHistory(item_id, user_id):
+        db.session.execute(
+            user_history.insert().values(user_id=user_id, item_id=item_id)
+        )
+        db.session.commit()

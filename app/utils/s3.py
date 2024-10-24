@@ -28,5 +28,3 @@ class bucket_pi_accessing:
             print(response)
         except ClientError as e:
             abort(500, description=f"Erro ao deletar arquivo na nuvem: {filename}")
-            
-        

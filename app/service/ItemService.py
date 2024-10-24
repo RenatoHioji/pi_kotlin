@@ -9,7 +9,7 @@ from flask import abort
 from utils.s3 import bucket_pi_accessing
 from models.Item import Item
 import io
-
+from flask import session
 class ItemService():
     def findAll():
         item_list = []
@@ -30,13 +30,32 @@ class ItemService():
     
     def delete(self, id:UUID):
         item = ItemRepository.findById(id)
-        bucket_pi_accessing.deleteFile(item.img )
+        bucket_pi_accessing.deleteFile(item.img)
         bucket_pi_accessing.deleteFile(item.video)
         ItemRepository.delete(item)
         
     def findById(self, id):
         item = ItemRepository.findById(id)
+        user_id = session['user_id']
+        ItemRepository.addUserHistory(id, user_id)
         return item.serialize()
+    
+    def update(self, id, name, syllables, img, video, category, subcategory):
+        old_item = ItemRepository.findById(id)
+        bucket_pi_accessing.deleteFile(old_item.img)
+        bucket_pi_accessing.deleteFile(old_item.video)
+        image_url, video_url = self.file_verification(img, video)
+        
+        old_item.name = name
+        old_item.syllables = syllables
+        old_item.img = image_url
+        old_item.video = video_url
+        old_item.category = category
+        old_item.subcategory = subcategory
+        
+        ItemRepository.update(old_item)
+        
+        return old_item.serialize()
         
         
     def file_verification(self, image, video):
