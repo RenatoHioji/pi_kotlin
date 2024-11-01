@@ -2,6 +2,9 @@ from flask import Flask
 import os
 from models.db import db
 from models.User import User
+from models.Item import Item
+from models.Game import Game
+from models.Quiz import Quiz
 from controllers.UserController import UserController
 from controllers.ItemController import ItemController
 from controllers.ControllerAdvice import ControllerAdvice
@@ -29,4 +32,7 @@ if __name__ == '__main__':
     with app.test_request_context():
         db.create_all()
         User.seed_user()
+        Item.seed_item()
+        Game.seed_game()
+        Quiz.seed_quiz()
     app.run(host='localhost', port=4000, debug=True)

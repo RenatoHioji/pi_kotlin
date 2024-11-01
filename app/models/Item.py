@@ -13,10 +13,10 @@ class Item(db.Model):
     category = db.Column(db.String(255), unique = False, nullable = True)
     subcategory = db.Column(db.String(255), unique = False, nullable= True)   
     
+    game_id = db.Column(UUID(as_uuid=True), db.ForeignKey('game.id'), nullable=True)
     user_id = db.Column(UUID(as_uuid=True), db.ForeignKey("user.id"), nullable=True)
     
-    
-    def __init__(self, name: str, syllables: str, img: str, video: str, category: Optional[str] = None, subcategory: Optional[str] = None, user_id: Optional[str] = None):
+    def __init__(self, name: str, syllables: str, img: str, video: str, category: Optional[str] = None, subcategory: Optional[str] = None, user_id: Optional[str] = None, game_id: Optional[str] = None ):
         self.name = name
         self.syllables = syllables
         self.img = img
@@ -24,6 +24,7 @@ class Item(db.Model):
         self.category = category
         self.subcategory = subcategory
         self.user_id = user_id
+        self.game_id = game_id
     
     def serialize(item):
         return {
@@ -38,4 +39,9 @@ class Item(db.Model):
     @staticmethod
     def seed_item():
         if not Item.query.first():
+            item = Item(name="teste", syllables="tes - te", img="teste.webp", video="teste")
+            db.session.add(item)
+            db.session.commit()
+        else:
             pass
+            
