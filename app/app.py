@@ -8,6 +8,7 @@ from models.Quiz import Quiz
 from controllers.UserController import UserController
 from controllers.ItemController import ItemController
 from controllers.ControllerAdvice import ControllerAdvice
+from controllers.GameController import GameController 
 from flask_cors import CORS
 from dotenv import load_dotenv
 from utils.s3 import bucket_pi_accessing
@@ -27,6 +28,7 @@ if __name__ == '__main__':
     db.init_app(app=app)
     UserController.init_app(app)
     ItemController.init_app(app)
+    GameController.init_app(app)
     ControllerAdvice.init_app(app)
     bucket_pi_accessing.init_s3()
     with app.test_request_context():

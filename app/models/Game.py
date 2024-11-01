@@ -12,6 +12,19 @@ class Game(db.Model):
     game_items = db.relationship("Item", backref="item_owner", lazy=True)
     quiz_id = db.Column(UUID(as_uuid=True), db.ForeignKey('quiz.id'), nullable=True)
     
+    def serialize(game):
+        return {
+            "id": game.id,
+            "correct_answer": game.correct_answer,
+            "type": game.type,
+            "game_items": game.game_items,
+            "quiz_id": game.quiz_id
+        }
+    def serialize_list(games):
+        game_list = []
+        for game in games:
+            game_list.append(game.serialize())
+        return game_list
     @staticmethod
     def seed_game():
         if not Game.query.first():
