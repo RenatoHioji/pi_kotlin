@@ -3,6 +3,7 @@ from uuid import UUID
 from flask import abort
 from sqlalchemy.exc import SQLAlchemyError
 from models.db import db, user_history
+
 class ItemRepository():
     def findAll():
         try:
@@ -22,7 +23,11 @@ class ItemRepository():
         if not item:
             abort(404, description="Item com o ID informado não foi encontrado")
         return item
-
+    
+    def findByParams(filters):
+        items = Item.query.filter(*filters).all()
+        return items
+    
     def delete(item: Item):
         try:
             db.session.delete(item)

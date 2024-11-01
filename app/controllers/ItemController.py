@@ -5,7 +5,15 @@ from utils.id_converter import id_converter
 class ItemController():
     def init_app(app):
         item_service = ItemService()
-        @app.route("/item", methods=["GET"])
+        @app.route("/item", methods = ["GET"])
+        def findByParams():
+            category = request.args.get("category") 
+            subcategory = request.args.get("subcategory") 
+            
+            items = ItemService.findByParams(category, subcategory)
+            return jsonify({"message": "Itens encontrados com sucesso", "items": items})
+        
+        @app.route("/items", methods=["GET"])
         def findAll():
             items = ItemService.findAll()
             return jsonify({"message": "Itens encontrados com sucesso", "items": items}), 200

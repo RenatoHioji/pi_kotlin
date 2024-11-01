@@ -9,14 +9,11 @@ from flask import abort
 from utils.s3 import bucket_pi_accessing
 from models.Item import Item
 import io
-from flask import session
+
 class ItemService():
     def findAll():
-        item_list = []
         items = ItemRepository.findAll()
-        for item in items:
-            item_list.append(item.serialize())
-        return item_list
+        return Item.serialize_list(items)
     
     def saveItemToUser(self, name, syllables, img, video, category, subcategory, user_id):
         image_url, video_url =self.file_verification(img, video)
@@ -38,6 +35,19 @@ class ItemService():
         item = ItemRepository.findById(id)
         ItemRepository.addUserHistory(id, user_id)
         return item.serialize()
+    
+    def findByParams(category, subcategory):
+        filters = [] 
+        if category: 
+            filters.append(Item.category == category) 
+        if subcategory: 
+            filters.append(Item.subcategory == subcategory)
+            
+        items = ItemRepository.findByParams(filters)
+        if not items:
+            abort(404, description=f"Não foi encontrado nenhum item com a categoria: {category} e/ou subcategoria: {subcategory}")
+
+        return Item.serialize_list(items)
     
     def update(self, id, name, syllables, img, video, category, subcategory):
         old_item = ItemRepository.findById(id)

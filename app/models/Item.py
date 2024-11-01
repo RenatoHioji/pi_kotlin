@@ -36,11 +36,21 @@ class Item(db.Model):
             "category": item.category,
             "subcategory": item.subcategory
         }
+    def serialize_list(items):
+        item_list = []
+        for item in items:
+            item_list.append(item.serialize())
+        return item_list
+
     @staticmethod
     def seed_item():
         if not Item.query.first():
-            item = Item(name="teste", syllables="tes - te", img="teste.webp", video="teste")
+            item = Item(name="teste", syllables="tes - te", img="teste.webp", video="teste", category="teste", subcategory="teste")
+            item2 = Item(name="teste", syllables="tes - te", img="teste.webp", video="teste", subcategory="teste")
+            item3 = Item(name="teste", syllables="tes - te", img="teste.webp", video="teste", category="teste")
             db.session.add(item)
+            db.session.add(item2)
+            db.session.add(item3)
             db.session.commit()
         else:
             pass
