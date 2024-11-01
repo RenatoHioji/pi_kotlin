@@ -43,10 +43,11 @@ class ItemController():
             item_id = id_converter.convert_id_uuid(id)
             item_service.delete(item_id)
             return jsonify({"message": "Item deletado com sucesso"}), 204
-        @app.route("/item/<string:id>", methods=["GET"])
-        def findById(id: str):
+        @app.route("/item/<string:id>/user/<string:id_user>", methods=["GET"])
+        def findById(id: str, id_user: str):
             item_id = id_converter.convert_id_uuid(id)
-            item = item_service.findById(item_id)
+            user_id = id_converter.convert_id_uuid(id_user)
+            item = item_service.findById(item_id, user_id)
             return jsonify({"message:": "Item buscado com sucesso", "item": item}), 200
         
         @app.route("/item/<string:id>", methods=["PUT"])

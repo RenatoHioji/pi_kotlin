@@ -34,9 +34,8 @@ class ItemService():
         bucket_pi_accessing.deleteFile(item.video)
         ItemRepository.delete(item)
         
-    def findById(self, id):
+    def findById(self, id, user_id):
         item = ItemRepository.findById(id)
-        user_id = session['user_id']
         ItemRepository.addUserHistory(id, user_id)
         return item.serialize()
     
