@@ -15,14 +15,14 @@ class bucket_pi_accessing:
             print("Não foi possíevl inicializar o S3 client")
 
     @staticmethod
-    def saveFile(file, new_filename):
+    def save_file(file, new_filename):
         try:
             s3Bucket.upload_fileobj(file, new_filename)
         except boto3.exceptions.S3UploadFailedError as e:
             abort(500, description=f"Erro ao tentar o arquivo na nuvem: {file}")
     
     @staticmethod
-    def deleteFile(filename):
+    def detele_file(filename):
         try: 
             response = s3Bucket.delete_objects(Delete={'Objects': [{'Key': filename}]})
             print(response)

@@ -5,7 +5,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from models.db import db, user_history
 
 class ItemRepository():
-    def findAll():
+    def find_all():
         try:
             items = Item.query.all()
             if not items:
@@ -18,13 +18,13 @@ class ItemRepository():
         db.session.commit()
         return item
     
-    def findById(id: UUID):
+    def find_by_id(id: UUID):
         item = Item.query.filter_by(id=id).first()
         if not item:
             abort(404, description="Item com o ID informado não foi encontrado")
         return item
     
-    def findByParams(filters):
+    def find_by_params(filters):
         items = Item.query.filter(*filters).all()
         return items
     
@@ -43,7 +43,7 @@ class ItemRepository():
             return
         except SQLAlchemyError as e:
             abort(500, description = f"Erro na query: {e}")
-    def addUserHistory(item_id, user_id):
+    def add_user_history(item_id, user_id):
         db.session.execute(
             user_history.insert().values(user_id=user_id, item_id=item_id)
         )

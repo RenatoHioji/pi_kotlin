@@ -11,11 +11,11 @@ from models.Item import Item
 import io
 
 class ItemService():
-    def findAll():
-        items = ItemRepository.findAll()
+    def find_all():
+        items = ItemRepository.find_all()
         return Item.serialize_list(items)
     
-    def saveItemToUser(self, name, syllables, img, video, category, subcategory, user_id):
+    def save_item_to_user(self, name, syllables, img, video, category, subcategory, user_id):
         image_url, video_url =self.file_verification(img, video)
         item = Item(name, syllables, image_url, video_url, category, subcategory, user_id)
         return ItemRepository.save(item)
@@ -26,33 +26,33 @@ class ItemService():
         return ItemRepository.save(item)
     
     def delete(self, id:UUID):
-        item = ItemRepository.findById(id)
-        bucket_pi_accessing.deleteFile(item.img)
-        bucket_pi_accessing.deleteFile(item.video)
+        item = ItemRepository.find_by_id(id)
+        bucket_pi_accessing.detele_file(item.img)
+        bucket_pi_accessing.detele_file(item.video)
         ItemRepository.delete(item)
         
-    def findById(self, id, user_id):
-        item = ItemRepository.findById(id)
-        ItemRepository.addUserHistory(id, user_id)
+    def find_by_id(self, id, user_id):
+        item = ItemRepository.find_by_id(id)
+        ItemRepository.add_user_history(id, user_id)
         return item.serialize()
     
-    def findByParams(category, subcategory):
+    def find_by_params(category, subcategory):
         filters = [] 
         if category: 
             filters.append(Item.category == category) 
         if subcategory: 
             filters.append(Item.subcategory == subcategory)
             
-        items = ItemRepository.findByParams(filters)
+        items = ItemRepository.find_by_params(filters)
         if not items:
             abort(404, description=f"Não foi encontrado nenhum item com a categoria: {category} e/ou subcategoria: {subcategory}")
 
         return Item.serialize_list(items)
     
     def update(self, id, name, syllables, img, video, category, subcategory):
-        old_item = ItemRepository.findById(id)
-        bucket_pi_accessing.deleteFile(old_item.img)
-        bucket_pi_accessing.deleteFile(old_item.video)
+        old_item = ItemRepository.find_by_id(id)
+        bucket_pi_accessing.detele_file(old_item.img)
+        bucket_pi_accessing.detele_file(old_item.video)
         image_url, video_url = self.file_verification(img, video)
         
         old_item.name = name
@@ -90,7 +90,7 @@ class ItemService():
         elif extension.lower() in ["jpg", "jpeg", "jfif"]:
             img.save(buffer, "webp", quality=85)
         buffer.seek(0)
-        bucket_pi_accessing.saveFile(buffer, new_filename)
+        bucket_pi_accessing.save_file(buffer, new_filename)
         return new_filename
     
     def upload_video(self, video, original_filename):
@@ -100,6 +100,6 @@ class ItemService():
         buffer = io.BytesIO()
         buffer.write(video.read())
         buffer.seek(0)
-        bucket_pi_accessing.saveFile(buffer, video_filename)
+        bucket_pi_accessing.save_file(buffer, video_filename)
         return video_filename
                 

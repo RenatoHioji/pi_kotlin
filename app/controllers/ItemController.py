@@ -6,20 +6,20 @@ class ItemController():
     def init_app(app):
         item_service = ItemService()
         @app.route("/item", methods = ["GET"])
-        def findByParams():
+        def find_items_by_params():
             category = request.args.get("category") 
             subcategory = request.args.get("subcategory") 
             
-            items = ItemService.findByParams(category, subcategory)
+            items = ItemService.find_by_params(category, subcategory)
             return jsonify({"message": "Itens encontrados com sucesso", "items": items})
         
         @app.route("/items", methods=["GET"])
-        def findAll():
-            items = ItemService.findAll()
+        def find_all():
+            items = ItemService.find_all()
             return jsonify({"message": "Itens encontrados com sucesso", "items": items}), 200
 
         @app.route("/user/<string:id>/item", methods=["POST"])
-        def saveItemToUser(id: str):
+        def save_item_to_user(id: str):
             user_id = id_converter.convert_id_uuid(id)
             data = request.form
             files = request.files
@@ -30,7 +30,7 @@ class ItemController():
             if not data["category"] and data["subcategory"]:
                 abort(400, description="Possui subcategoria, porém não há categoria")
                 
-            item_service.saveItemToUser(data["name"], data["syllables"], files["image"], files["video"], data["category"], data["subcategory"], user_id)
+            item_service.save_item_to_user(data["name"], data["syllables"], files["image"], files["video"], data["category"], data["subcategory"], user_id)
             return jsonify({"message" : "Item salvo com sucesso!"}), 201    
         @app.route("/item", methods=["POST"])
         def save():
@@ -52,10 +52,10 @@ class ItemController():
             item_service.delete(item_id)
             return jsonify({"message": "Item deletado com sucesso"}), 204
         @app.route("/item/<string:id>/user/<string:id_user>", methods=["GET"])
-        def findById(id: str, id_user: str):
+        def find_by_id(id: str, id_user: str):
             item_id = id_converter.convert_id_uuid(id)
             user_id = id_converter.convert_id_uuid(id_user)
-            item = item_service.findById(item_id, user_id)
+            item = item_service.find_by_id(item_id, user_id)
             return jsonify({"message:": "Item buscado com sucesso", "item": item}), 200
         
         @app.route("/item/<string:id>", methods=["PUT"])
