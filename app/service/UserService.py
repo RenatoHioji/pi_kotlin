@@ -16,34 +16,34 @@ class UserService():
         else:
             abort(404, description = "Usuário email e/ou senhas incorretas ou usuário inexistente")
                 
-    def findUserById(user_id: UUID):
-        user = UserRepository.findUserById(user_id)
+    def find_user_by_id(user_id: UUID):
+        user = UserRepository.find_user_by_id(user_id)
         if not user:
             abort(404, description = "Usuário não foi encontrado")
         return user.get_profile()
     
     
     
-    def updateUser(user: User, user_id: UUID):
-        oldUser = UserRepository.findUserById(user_id)
+    def update_user(user: User, user_id: UUID):
+        oldUser = UserRepository.find_user_by_id(user_id)
         oldUser.email = user.email
         oldUser.password = user.password
         oldUser.username = user.username
-        UserRepository.updateUser(oldUser)
+        UserRepository.update_user(oldUser)
         return 
     
     def delete(user_id: UUID):
-        user = UserRepository.findUserById(user_id)
+        user = UserRepository.find_user_by_id(user_id)
         return UserRepository.delete(user)
 
-    def findUserItems(user_id):
-        user = UserRepository.findUserById(user_id)
+    def find_user_items(user_id):
+        user = UserRepository.find_user_by_id(user_id)
         if not user:
             abort(400, description="Usuário não encontrado")
         return user.get_items()
     
-    def findUserHistory(user_id: UUID):
-        history = UserRepository.findUserById(user_id).get_history()
+    def find_user_history(user_id: UUID):
+        history = UserRepository.find_user_by_id(user_id).get_history()
         if not history:
             abort(404, description = "Histórico não foi encontrado")
         return history[::-1]
@@ -52,7 +52,7 @@ class UserService():
         more_view = UserRepository.find_more_view_items(user_id)
         items = []
         for object in more_view:
-            items.append(ItemRepository.findById(object[0]).serialize())
+            items.append(ItemRepository.find_user_by_id(object[0]).serialize())
         if not more_view:
             abort(404, "Usuário ainda não viu nenhum item")
         return items

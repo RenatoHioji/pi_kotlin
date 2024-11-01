@@ -19,7 +19,7 @@ class UserRepository():
             db.session.rollback() 
             abort(500, description = f"Exception: {e}")
         
-    def findByEmail(email: str):
+    def find_by_email(email: str):
         try:
             user = User.query.filter_by(email = email).first()
             if not user:
@@ -28,14 +28,14 @@ class UserRepository():
         except SQLAlchemyError as e:
             abort(500, description=f"Erro na query: {e}")
     
-    def findUserById(user_id: UUID):
+    def find_user_by_id(user_id: UUID):
         try:
             history = User.query.filter_by(id = user_id).first()
             return history
         except SQLAlchemyError as e:
             abort(500, description = f"Erro na query: {e}")
     
-    def updateUser(user: User):
+    def update_user(user: User):
         try:
             db.session.commit()
             return

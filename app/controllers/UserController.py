@@ -41,13 +41,13 @@ class UserController():
             return jsonify({"message": "Usuário logado com sucesso!", "user_id": result.id}), 200   
         
         @app.route("/user/<string:id>", methods=["GET"])
-        def findUserById(id: str):
+        def find_user_by_id(id: str):
             user_id = id_converter.convert_id_uuid(id)
-            user = UserService.findUserById(user_id)
+            user = UserService.find_user_by_id(user_id)
             return jsonify({"message": "Usuário encontrado com sucesso", "user": user}), 200           
 
         @app.route("/user/<string:id>", methods=["PUT"])
-        def updateUser(id: str):
+        def update_user(id: str):
             data = request.get_json()
             username = data.get("username")
             email = data.get("email")
@@ -58,11 +58,11 @@ class UserController():
                 abort(400, description="Usuário, email ou senha estão faltando")
             hashed_password = hash_password(password)
             user = User(username, email, hashed_password)
-            UserService.updateUser(user, user_id)
+            UserService.update_user(user, user_id)
             return jsonify({"message": "Usuário atualizado com sucesso"}), 200
             
         @app.route("/user/<string:id>", methods=["DELETE"])
-        def deleteUser(id: str):
+        def delete_user(id: str):
             user_id = id_converter.convert_id_uuid(id)
             UserService.delete(user_id)
             return jsonify({"message": "Usuário deletado com sucesso"}), 204
@@ -70,13 +70,13 @@ class UserController():
         @app.route("/user/<string:id>/recents", methods=["GET"])
         def find_user_history(id: str):
             user_id = id_converter.convert_id_uuid(id)
-            history = UserService.findUserHistory(user_id)
+            history = UserService.find_user_history(user_id)
             return jsonify({"message": "Histórico de itens encontrados com sucesso", "history": history}), 200
     
         @app.route("/user/<string:id>/items", methods = ["GET"])
         def my_items(id: str ):
             user_id = id_converter.convert_id_uuid(id)
-            userItems = UserService.findUserItems(user_id)
+            userItems = UserService.find_user_items(user_id)
             return jsonify({"message": "Itens encontrados com sucesso", "items": userItems})
         
         @app.route("/user/<string:id>/more_viewed", methods = ["GET"])
