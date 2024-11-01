@@ -12,7 +12,6 @@ class UserController():
         def check_auth():
             routes = ['login', 'register', '/hello-world', '/']
             if "user_id" not in session and request.endpoint not in routes:
-                print(request.endpoint)
                 abort(500, description="Usuário não está logado")
 
         @app.route("/hello-world", methods=["GET"])
@@ -39,7 +38,7 @@ class UserController():
             password = data.get("password")
             user = User(email = email, password= password)
             result = UserService.login(user)
-            return jsonify({"message": "Usuário logado com sucesso!"}), 200   
+            return jsonify({"message": "Usuário logado com sucesso!", "user_id": result.id}), 200   
         
         @app.route("/user/<string:id>", methods=["GET"])
         def findUserById(id: str):

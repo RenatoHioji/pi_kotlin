@@ -12,7 +12,7 @@ class UserService():
         if userRegistered and verify_password(userRegistered.password, user.password):
             session['user_id'] = userRegistered.id
             session['email'] = userRegistered.username
-            return 
+            return userRegistered
         else:
             abort(404, description = "Usuário email e/ou senhas incorretas ou usuário inexistente")
                 
@@ -21,6 +21,8 @@ class UserService():
         if not user:
             abort(404, description = "Usuário não foi encontrado")
         return user.get_profile()
+    
+    
     
     def updateUser(user: User, user_id: UUID):
         oldUser = UserRepository.findUserById(user_id)
