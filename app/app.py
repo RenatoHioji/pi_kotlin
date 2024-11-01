@@ -9,6 +9,7 @@ from controllers.UserController import UserController
 from controllers.ItemController import ItemController
 from controllers.ControllerAdvice import ControllerAdvice
 from controllers.GameController import GameController 
+from controllers.QuizController import QuizControlller
 from flask_cors import CORS
 from dotenv import load_dotenv
 from utils.s3 import bucket_pi_accessing
@@ -30,7 +31,9 @@ if __name__ == '__main__':
     ItemController.init_app(app)
     GameController.init_app(app)
     ControllerAdvice.init_app(app)
+    QuizControlller.init_app(app)
     bucket_pi_accessing.init_s3()
+    
     with app.test_request_context():
         db.create_all()
         User.seed_user()
