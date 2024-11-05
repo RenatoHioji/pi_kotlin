@@ -35,12 +35,9 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 with app.app_context(): 
-    try: 
-        db.create_all()
-        User.seed_user()
-        Item.seed_item()
-        Game.seed_game()
-        Quiz.seed_quiz()
-        logger.info("Connectado ao banco")
-    except Exception as e: 
-        logger.error(f"Não foi possível conectar ao banco: {e}")
+    db.create_all()
+    User.seed_user()
+    Item.seed_item()
+    Game.seed_game()
+    Quiz.seed_quiz()
+    logger.info("Connectado ao banco")
