@@ -12,7 +12,7 @@ class bucket_pi_accessing:
             s3Bucket = s3.Bucket(os.environ.get("BUCKET_NAME"))
             print("S3 Inicializado com sucesso")
         except Exception as e:
-            print("Não foi possíevl inicializar o S3 client")
+            print("Não foi possíevl inicializar o S3 client", e)
 
     @staticmethod
     def save_file(file, new_filename):

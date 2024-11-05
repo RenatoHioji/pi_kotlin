@@ -2,12 +2,13 @@ FROM python:3.12.7-alpine3.20
 
 WORKDIR /app
 
-COPY ./requirements.txt .
+COPY ./script.sh /scripts/
 
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
 COPY . .
 
 EXPOSE 4000
 
-CMD CD app & py ./app.py
+ENTRYPOINT ["/scripts/script.sh"]
