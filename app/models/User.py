@@ -5,7 +5,7 @@ from .db import db, user_history
 from sqlalchemy.orm import relationship
 
 class User(db.Model):
-    __tablename__ = 'user'
+    __tablename__ = 'app_user'
     
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     username = db.Column(db.String(255), unique=True, nullable=False)
@@ -40,7 +40,7 @@ class User(db.Model):
     @staticmethod
     def seed_user():
         if not User.query.first():
-            user = User(username="admin", email="admin@example.com", password=generate_password_hash("admin", method="scrypt"))
+            user = User(username="teste", email="admin@example.com", password=generate_password_hash("admin", method="scrypt"))
             db.session.add(user)
             db.session.commit()
         else:

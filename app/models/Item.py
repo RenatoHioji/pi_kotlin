@@ -14,7 +14,7 @@ class Item(db.Model):
     subcategory = db.Column(db.String(255), unique = False, nullable= True)   
     
     game_id = db.Column(UUID(as_uuid=True), db.ForeignKey('game.id'), nullable=True)
-    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey("user.id"), nullable=True)
+    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey("app_user.id"), nullable=True)
     
     def __init__(self, name: str, syllables: str, img: str, video: str, category: Optional[str] = None, subcategory: Optional[str] = None, user_id: Optional[str] = None, game_id: Optional[str] = None ):
         self.name = name
