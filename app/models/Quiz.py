@@ -1,6 +1,7 @@
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
 from .db import db
+from .Game import Game
 
 class Quiz(db.Model):
     __tablename__ = "quiz"
@@ -23,8 +24,14 @@ class Quiz(db.Model):
     @staticmethod
     def seed_quiz():
         if not Quiz.query.first():
-            quiz = Quiz(nivel = 0)
+            quizzes = [
+                Quiz(nivel = 0),
+                Quiz(nivel = 1),
+                Quiz(nivel = 2)
+            ]           
+                
             db.session.add(quiz)
             db.session.commit()
+            
         else:
             pass

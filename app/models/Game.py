@@ -26,10 +26,28 @@ class Game(db.Model):
             game_list.append(game.serialize())
         return game_list
     @staticmethod
-    def seed_game():
+    def seed_game(quiz, quiz2, quiz3):
+        # Pato uva sim madeira
         if not Game.query.first():
-            game = Game(correct_answer=0, type=0)
-            db.session.add(game)
+            games = [
+                Game(correct_answer=0, type=0, quiz_id=quiz.id),
+                Game(correct_answer=1, type=0, quiz_id=quiz.id),
+                Game(correct_answer=2, type=0, quiz_id=quiz.id),
+                Game(correct_answer=1, type=2, quiz_id=quiz.id),
+                Game(correct_answer=3, type=0, quiz_id=quiz.id),
+                Game(correct_answer=2, type=1, quiz_id=quiz2.id),
+                Game(correct_answer=1, type=2, quiz_id=quiz2.id),
+                Game(correct_answer=0, type=1, quiz_id=quiz2.id),
+                Game(correct_answer=2, type=0, quiz_id=quiz2.id),
+                Game(correct_answer=2, type=1, quiz_id=quiz2.id),
+                Game(correct_answer=1, type=0, quiz_id=quiz3.id),
+                Game(correct_answer=0, type=2, quiz_id=quiz3.id),
+                Game(correct_answer=2, type=1, quiz_id=quiz3.id),
+                Game(correct_answer=2, type=1, quiz_id=quiz3.id),
+                Game(correct_answer=0, type=0, quiz_id=quiz3.id)
+            ]            
+            for game in games:
+                db.session.add(game)
             db.session.commit()
         else:
             pass
