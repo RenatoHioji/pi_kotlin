@@ -6,6 +6,7 @@ from models.User import User
 from models.Item import Item
 from models.Game import Game
 from models.Quiz import Quiz
+from models.populate import Populate
 from controllers.UserController import UserController
 from controllers.ItemController import ItemController
 from controllers.ControllerAdvice import ControllerAdvice
@@ -38,6 +39,6 @@ with app.app_context():
     db.create_all()
     User.seed_user()
     Quiz.seed_quiz()
-    Item.seed_item()
-    Game.seed_game()
+    Game.seed_game(Quiz)
+    Item.seed_item(Game)
     logger.info("Connectado ao banco")

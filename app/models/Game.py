@@ -2,7 +2,15 @@ from .db import db, game_list
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from .Quiz import Quiz
+
+
+
+
+
+
+
+
+
 class Game(db.Model):
     __tablename__ = "game"
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
@@ -26,7 +34,7 @@ class Game(db.Model):
             game_list.append(game.serialize())
         return game_list
     @staticmethod
-    def seed_game():
+    def seed_game(Quiz):
         if not Game.query.first():
             games = [
                 Game(correct_answer=0, type=0),
@@ -36,20 +44,17 @@ class Game(db.Model):
                 Game(correct_answer=3, type=0),
                 Game(correct_answer=2, type=1),
             ]            
-            for game in games:
-                db.session.add(game)
+            db.session.add_all(games)
             db.session.commit()
             
-            games = Game.query.all()
-            quizzes = Quiz.query.all()
-            db.session.execute(
-                game_list.insert().values(game_id=games[0].id, quiz_id=quizzes[0]),
-                game_list.insert().values(game_id=games[1].id, quiz_id=quizzes[0]),
-                game_list.insert().values(game_id=games[2].id, quiz_id=quizzes[1]),
-                game_list.insert().values(game_id=games[3].id, quiz_id=quizzes[1]),
-                game_list.insert().values(game_id=games[4].id, quiz_id=quizzes[2]),
-                game_list.insert().values(game_id=games[5].id, quiz_id=quizzes[2]),
-            )
+            games[0].quizzes.append(quizzes[0])
+            games[1].quizzes.append(quizzes[0])
+            games[2].quizzes.append(quizzes[1])
+            games[3].quizzes.append(quizzes[1])
+            games[4].quizzes.append(quizzes[2])
+            games[5].quizzes.append(quizzes[2])
+
+            db.session.commit() 
         else:
             pass
             

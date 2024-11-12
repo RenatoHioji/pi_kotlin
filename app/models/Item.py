@@ -1,7 +1,6 @@
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
 from .db import db, table_game_items
-from .Game import Game
 from typing import Optional
 class Item(db.Model):
     __tablename__ = 'item'
@@ -44,7 +43,7 @@ class Item(db.Model):
         return item_list
 
     @staticmethod
-    def seed_item():
+    def seed_item(Game):
         if not Item.query.first():
             items = [
                 Item(name="Eu", syllables="Eu", img="eu.svg", video="eu.mp4", category="pessoa", subcategory="pronomes"),

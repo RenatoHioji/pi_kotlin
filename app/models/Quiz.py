@@ -1,7 +1,6 @@
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
 from .db import db
-from .Game import Game
 
 class Quiz(db.Model):
     __tablename__ = "quiz"
@@ -32,6 +31,5 @@ class Quiz(db.Model):
             for quiz in quizzes:
                 db.session.add(quiz)
             db.session.commit()
-            
         else:
             pass
