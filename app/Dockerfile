@@ -11,4 +11,4 @@ COPY . .
 
 EXPOSE 4000
 
-ENTRYPOINT ["/scripts/script.sh"]
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:4000", "app:app"]
