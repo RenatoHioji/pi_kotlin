@@ -1,8 +1,8 @@
-from .db import db
+from .db import db, game_list
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-
+from .Quiz import Quiz
 class Game(db.Model):
     __tablename__ = "game"
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
@@ -26,29 +26,30 @@ class Game(db.Model):
             game_list.append(game.serialize())
         return game_list
     @staticmethod
-    def seed_game(quiz, quiz2, quiz3):
-        # Pato uva sim madeira
+    def seed_game():
         if not Game.query.first():
             games = [
-                Game(correct_answer=0, type=0, quiz_id=quiz.id),
-                Game(correct_answer=1, type=0, quiz_id=quiz.id),
-                Game(correct_answer=2, type=0, quiz_id=quiz.id),
-                Game(correct_answer=1, type=2, quiz_id=quiz.id),
-                Game(correct_answer=3, type=0, quiz_id=quiz.id),
-                Game(correct_answer=2, type=1, quiz_id=quiz2.id),
-                Game(correct_answer=1, type=2, quiz_id=quiz2.id),
-                Game(correct_answer=0, type=1, quiz_id=quiz2.id),
-                Game(correct_answer=2, type=0, quiz_id=quiz2.id),
-                Game(correct_answer=2, type=1, quiz_id=quiz2.id),
-                Game(correct_answer=1, type=0, quiz_id=quiz3.id),
-                Game(correct_answer=0, type=2, quiz_id=quiz3.id),
-                Game(correct_answer=2, type=1, quiz_id=quiz3.id),
-                Game(correct_answer=2, type=1, quiz_id=quiz3.id),
-                Game(correct_answer=0, type=0, quiz_id=quiz3.id)
+                Game(correct_answer=0, type=0),
+                Game(correct_answer=2, type=0),
+                Game(correct_answer=1, type=0),
+                Game(correct_answer=1, type=2),
+                Game(correct_answer=3, type=0),
+                Game(correct_answer=2, type=1),
             ]            
             for game in games:
                 db.session.add(game)
             db.session.commit()
+            
+            games = Game.query.all()
+            quizzes = Quiz.query.all()
+            db.session.execute(
+                game_list.insert().values(game_id=games[0].id, quiz_id=quizzes[0]),
+                game_list.insert().values(game_id=games[1].id, quiz_id=quizzes[0]),
+                game_list.insert().values(game_id=games[2].id, quiz_id=quizzes[1]),
+                game_list.insert().values(game_id=games[3].id, quiz_id=quizzes[1]),
+                game_list.insert().values(game_id=games[4].id, quiz_id=quizzes[2]),
+                game_list.insert().values(game_id=games[5].id, quiz_id=quizzes[2]),
+            )
         else:
             pass
             

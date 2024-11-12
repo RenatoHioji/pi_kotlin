@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 with app.app_context(): 
     db.create_all()
     User.seed_user()
+    Quiz.seed_quiz()
     Item.seed_item()
     Game.seed_game()
-    Quiz.seed_quiz()
     logger.info("Connectado ao banco")

@@ -1,6 +1,7 @@
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
 from .db import db, table_game_items
+from .Game import Game
 from typing import Optional
 class Item(db.Model):
     __tablename__ = 'item'
@@ -82,31 +83,39 @@ class Item(db.Model):
                 db.session.add(item)
             db.session.commit()
             
+            games = Game.query.all()
+            madeira = Item.query.filter_by(name="Madeira")
+            uva = Item.query.filter_by(name="Uva")
+            sim = Item.query.filter_by(name="Sim")
+            pato = Item.query.filter_by(name="Pato")
+            items = Item.query.filter(Item.name.notin_(["Madeira", "Uva", "Sim", "Pato"])).all()
+
+            
             db.session.execute(
-                table_game_items.insert().values(game_id=game.id, item_id=madeira.id),
-                table_game_items.insert().values(game_id=game.id, item_id=item2.id),
-                table_game_items.insert().values(game_id=game.id, item_id=item3.id),
-                table_game_items.insert().values(game_id=game.id, item_id=item4.id),
-                table_game_items.insert().values(game_id=game2.id, item_id=item5.id),
-                table_game_items.insert().values(game_id=game2.id, item_id=item6.id),
-                table_game_items.insert().values(game_id=game2.id, item_id=pato.id),
-                table_game_items.insert().values(game_id=game2.id, item_id=item8.id),
-                table_game_items.insert().values(game_id=game3.id, item_id=item1.id),
-                table_game_items.insert().values(game_id=game3.id, item_id=uva.id),
-                table_game_items.insert().values(game_id=game3.id, item_id=item4.id),
-                table_game_items.insert().values(game_id=game3.id, item_id=item6.id),
-                table_game_items.insert().values(game_id=game4.id, item_id=item7.id),
-                table_game_items.insert().values(game_id=game4.id, item_id=sim.id),
-                table_game_items.insert().values(game_id=game4.id, item_id=item2.id),
-                table_game_items.insert().values(game_id=game4.id, item_id=item30.id),
-                table_game_items.insert().values(game_id=game5.id, item_id=item15.id),
-                table_game_items.insert().values(game_id=game5.id, item_id=sim.id),
-                table_game_items.insert().values(game_id=game5.id, item_id=item29.id),
-                table_game_items.insert().values(game_id=game5.id, item_id=item30.id),
-                table_game_items.insert().values(game_id=game6.id, item_id=item30.id),
-                table_game_items.insert().values(game_id=game6.id, item_id=item25.id),
-                table_game_items.insert().values(game_id=game6.id, item_id=item2.id),
-                table_game_items.insert().values(game_id=game6.id, item_id=item5.id)
+                table_game_items.insert().values(game_id=games[0].id, item_id=madeira.id),
+                table_game_items.insert().values(game_id=games[0].id, item_id=items[2].id),
+                table_game_items.insert().values(game_id=games[0].id, item_id=items[1].id),
+                table_game_items.insert().values(game_id=games[0].id, item_id=items[0].id),
+                table_game_items.insert().values(game_id=games[1].id, item_id=items[5].id),
+                table_game_items.insert().values(game_id=games[1].id, item_id=items[4].id),
+                table_game_items.insert().values(game_id=games[1].id, item_id=pato.id),
+                table_game_items.insert().values(game_id=games[1].id, item_id=items[8].id),
+                table_game_items.insert().values(game_id=games[2].id, item_id=items[9].id),
+                table_game_items.insert().values(game_id=games[2].id, item_id=uva.id),
+                table_game_items.insert().values(game_id=games[2].id, item_id=items[12].id),
+                table_game_items.insert().values(game_id=games[2].id, item_id=items[17].id),
+                table_game_items.insert().values(game_id=games[3].id, item_id=items[16].id),
+                table_game_items.insert().values(game_id=games[3].id, item_id=sim.id),
+                table_game_items.insert().values(game_id=games[3].id, item_id=items[9].id),
+                table_game_items.insert().values(game_id=games[3].id, item_id=items[10].id),
+                table_game_items.insert().values(game_id=games[4].id, item_id=items[11].id),
+                table_game_items.insert().values(game_id=games[4].id, item_id=items[6].id),
+                table_game_items.insert().values(game_id=games[4].id, item_id=items[11].id),
+                table_game_items.insert().values(game_id=games[4].id, item_id=pato.id),
+                table_game_items.insert().values(game_id=games[5].id, item_id=items[22].id),
+                table_game_items.insert().values(game_id=games[5].id, item_id=items[23].id),
+                table_game_items.insert().values(game_id=games[5].id, item_id=items[25].id),
+                table_game_items.insert().values(game_id=games[5].id, item_id=items[15].id)
             )
         else:
             pass

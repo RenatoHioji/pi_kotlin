@@ -29,8 +29,8 @@ class Quiz(db.Model):
                 Quiz(nivel = 1),
                 Quiz(nivel = 2)
             ]           
-                
-            db.session.add(quiz)
+            for quiz in quizzes:
+                db.session.add(quiz)
             db.session.commit()
             
         else:
