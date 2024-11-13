@@ -14,7 +14,7 @@ class Item(db.Model):
     subcategory = db.Column(db.String(255), unique = False, nullable= True)   
     
     game_id = db.Column(UUID(as_uuid=True), db.ForeignKey('game.id'), nullable=True)
-    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey("app_user.id"), nullable=True)
+    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey("usuario.id"), nullable=True)
     
     def __init__(self, name: str, syllables: str, img: str, video: str, category: Optional[str] = None, subcategory: Optional[str] = None, user_id: Optional[str] = None, game_id: Optional[str] = None ):
         self.name = name
@@ -78,44 +78,43 @@ class Item(db.Model):
                 Item(name="Sim", syllables="Sim", img="sim.svg", video="sim.mp4", category="resposta", subcategory="afirmativas"),
                 Item(name="Uva", syllables="U - va", img="uva.svg", video="uva.mp4", category="alimento", subcategory="frutas")
             ]
-            for item in items:
-                db.session.add(item)
+            db.session.add_all(items)
             db.session.commit()
             
             games = Game.query.all()
-            madeira = Item.query.filter_by(name="Madeira")
-            uva = Item.query.filter_by(name="Uva")
-            sim = Item.query.filter_by(name="Sim")
-            pato = Item.query.filter_by(name="Pato")
+            madeira = Item.query.filter_by(name="Madeira").first()
+            uva = Item.query.filter_by(name="Uva").first()
+            sim = Item.query.filter_by(name="Sim").first()
+            pato = Item.query.filter_by(name="Pato").first()
             items = Item.query.filter(Item.name.notin_(["Madeira", "Uva", "Sim", "Pato"])).all()
-
-            
-            db.session.execute(
-                table_game_items.insert().values(game_id=games[0].id, item_id=madeira.id),
-                table_game_items.insert().values(game_id=games[0].id, item_id=items[2].id),
-                table_game_items.insert().values(game_id=games[0].id, item_id=items[1].id),
-                table_game_items.insert().values(game_id=games[0].id, item_id=items[0].id),
-                table_game_items.insert().values(game_id=games[1].id, item_id=items[5].id),
-                table_game_items.insert().values(game_id=games[1].id, item_id=items[4].id),
-                table_game_items.insert().values(game_id=games[1].id, item_id=pato.id),
-                table_game_items.insert().values(game_id=games[1].id, item_id=items[8].id),
-                table_game_items.insert().values(game_id=games[2].id, item_id=items[9].id),
-                table_game_items.insert().values(game_id=games[2].id, item_id=uva.id),
-                table_game_items.insert().values(game_id=games[2].id, item_id=items[12].id),
-                table_game_items.insert().values(game_id=games[2].id, item_id=items[17].id),
-                table_game_items.insert().values(game_id=games[3].id, item_id=items[16].id),
-                table_game_items.insert().values(game_id=games[3].id, item_id=sim.id),
-                table_game_items.insert().values(game_id=games[3].id, item_id=items[9].id),
-                table_game_items.insert().values(game_id=games[3].id, item_id=items[10].id),
-                table_game_items.insert().values(game_id=games[4].id, item_id=items[11].id),
-                table_game_items.insert().values(game_id=games[4].id, item_id=items[6].id),
-                table_game_items.insert().values(game_id=games[4].id, item_id=items[11].id),
-                table_game_items.insert().values(game_id=games[4].id, item_id=pato.id),
-                table_game_items.insert().values(game_id=games[5].id, item_id=items[22].id),
-                table_game_items.insert().values(game_id=games[5].id, item_id=items[23].id),
-                table_game_items.insert().values(game_id=games[5].id, item_id=items[25].id),
-                table_game_items.insert().values(game_id=games[5].id, item_id=items[15].id)
-            )
+            values = [
+                {'game_id': games[0].id, 'item_id': madeira.id},
+                {'game_id': games[0].id, 'item_id': items[2].id},
+                {'game_id': games[0].id, 'item_id': items[1].id},
+                {'game_id': games[0].id, 'item_id': items[0].id},
+                {'game_id': games[1].id, 'item_id': items[5].id},
+                {'game_id': games[1].id, 'item_id': items[4].id},
+                {'game_id': games[1].id, 'item_id': pato.id},
+                {'game_id': games[1].id, 'item_id': items[8].id},
+                {'game_id': games[2].id, 'item_id': items[9].id},
+                {'game_id': games[2].id, 'item_id': uva.id},
+                {'game_id': games[2].id, 'item_id': items[12].id},
+                {'game_id': games[2].id, 'item_id': items[17].id},
+                {'game_id': games[3].id, 'item_id': items[16].id},
+                {'game_id': games[3].id, 'item_id': sim.id},
+                {'game_id': games[3].id, 'item_id': items[9].id},
+                {'game_id': games[3].id, 'item_id': items[10].id},
+                {'game_id': games[4].id, 'item_id': items[11].id},
+                {'game_id': games[4].id, 'item_id': items[6].id},
+                {'game_id': games[4].id, 'item_id': items[11].id},
+                {'game_id': games[4].id, 'item_id': pato.id},
+                {'game_id': games[5].id, 'item_id': items[22].id},
+                {'game_id': games[5].id, 'item_id': items[23].id},
+                {'game_id': games[5].id, 'item_id': items[25].id},
+                {'game_id': games[5].id, 'item_id': items[15].id}
+            ]
+            db.session.execute(table_game_items.insert(), values)
+            db.session.commit()
         else:
             pass
             

@@ -40,5 +40,4 @@ with app.app_context():
     Quiz.seed_quiz()
     Game.seed_game(Quiz)
     Item.seed_item(Game)
-    app.run(Debug=True)
     logger.info("Connectado ao banco")

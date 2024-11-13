@@ -2,15 +2,7 @@ from .db import db, game_list
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-
-
-
-
-
-
-
-
-
+from .Quiz import Quiz
 class Game(db.Model):
     __tablename__ = "game"
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
@@ -47,14 +39,18 @@ class Game(db.Model):
             db.session.add_all(games)
             db.session.commit()
             
-            games[0].quizzes.append(quizzes[0])
-            games[1].quizzes.append(quizzes[0])
-            games[2].quizzes.append(quizzes[1])
-            games[3].quizzes.append(quizzes[1])
-            games[4].quizzes.append(quizzes[2])
-            games[5].quizzes.append(quizzes[2])
-
-            db.session.commit() 
+            games = Game.query.all()
+            quizzes = Quiz.query.all()
+            values = [
+                {'game_id': games[0].id, 'quiz_id': quizzes[0].id},
+                {'game_id': games[1].id, 'quiz_id': quizzes[0].id},
+                {'game_id': games[2].id, 'quiz_id': quizzes[1].id},
+                {'game_id': games[3].id, 'quiz_id': quizzes[1].id},
+                {'game_id': games[4].id, 'quiz_id': quizzes[2].id},
+                {'game_id': games[5].id, 'quiz_id': quizzes[2].id},
+            ]
+            db.session.execute(game_list.insert(), values)
+            db.session.commit()
         else:
             pass
             
