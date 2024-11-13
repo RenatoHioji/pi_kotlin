@@ -49,7 +49,6 @@ class Item(db.Model):
                 Item(name="Eu", syllables="Eu", img="eu.webp", video="eu.mp4", category="pessoa", subcategory="pronomes"),
                 Item(name="Você", syllables="Você", img="voce.webp", video="voce.mp4", category="pessoa", subcategory="pronomes"),
                 Item(name="Amigo", syllables="Ami  - go", img="amigo.webp", video="amigo.mp4", category="pessoa", subcategory="conhecido"),
-                Item(name="Almoço", syllables="Al - mo - ço", img="almoco.webp", video="almoco.mp4", category="acao", subcategory="verbos"),
                 Item(name="Comer", syllables="Co - mer", img="comer.webp", video="comer.mp4", category="acao", subcategory="verbos"),
                 Item(name="Beber", syllables="Be - ber", img="beber.webp", video="beber.mp4", category="acao", subcategory="verbos"),
                 Item(name="Brincar", syllables="Brin - car", img="brincar.webp", video="brincar.mp4", category="acao", subcategory="verbos"),
