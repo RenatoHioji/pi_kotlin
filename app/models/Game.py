@@ -3,14 +3,6 @@ import uuid
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
-
-
-
-
-
-
-
-
 class Game(db.Model):
     __tablename__ = "game"
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
@@ -25,7 +17,7 @@ class Game(db.Model):
             "id": game.id,
             "correct_answer": game.correct_answer,
             "type": game.type,
-            "game_items": game.game_items,
+            "game_items": len(game.game_items),
             "quiz_id": game.quiz_id
         }
     def serialize_list(games):
@@ -34,7 +26,6 @@ class Game(db.Model):
             game_list.append(game.serialize())
         return game_list
     @staticmethod
-    def seed_game(Quiz):
     def seed_game(Quiz):
         if not Game.query.first():
             games = [

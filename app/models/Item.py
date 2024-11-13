@@ -1,6 +1,6 @@
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
-from .db import db, table_game_items
+from .db import db, game_items
 from typing import Optional
 class Item(db.Model):
     __tablename__ = 'item'
@@ -113,7 +113,7 @@ class Item(db.Model):
                 {'game_id': games[5].id, 'item_id': items[25].id},
                 {'game_id': games[5].id, 'item_id': items[15].id}
             ]
-            db.session.execute(table_game_items.insert(), values)
+            db.session.execute(game_items.insert(), values)
             db.session.commit()
         else:
             pass
