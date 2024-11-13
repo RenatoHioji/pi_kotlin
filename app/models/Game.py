@@ -1,7 +1,8 @@
-from .db import db, game_list
+from .db import db, game_list, game_items
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
+
 
 class Game(db.Model):
     __tablename__ = "game"
@@ -9,17 +10,22 @@ class Game(db.Model):
     correct_answer = db.Column(db.Integer, unique=False, nullable=False)
     type =  db.Column(db.Integer, unique=False, nullable=False)
     
-    game_items = db.relationship("Item", backref="item_owner", lazy=True)
+    game_items = db.relationship("Item", secondary=game_items, lazy='subquery', backref=db.backref("games", lazy=True))
     quiz_id = db.Column(UUID(as_uuid=True), db.ForeignKey('quiz.id'), nullable=True)
     
-    def serialize(game):
+    def serialize(self):
         return {
-            "id": game.id,
-            "correct_answer": game.correct_answer,
-            "type": game.type,
-            "game_items": len(game.game_items),
-            "quiz_id": game.quiz_id
+            "id": self.id,
+            "correct_answer": self.correct_answer,
+            "type": self.type,
+            "game_items": self.serialize_items(self.game_items),
+            "quiz_id": self.quiz_id
         }
+    def serialize_items(self, games):
+        game_list = []
+        for game in games:
+            game_list.append(game.serialize())
+        return game_list
     def serialize_list(games):
         game_list = []
         for game in games:
