@@ -8,12 +8,6 @@ from utils.id_converter import id_converter
 
 class UserController():
     def init_app(app):
-        @app.before_request
-        def check_auth():
-            routes = ['login', 'register', '/hello-world', '/']
-            if "user_id" not in session and request.endpoint not in routes:
-                abort(500, description="Usuário não está logado")
-
         @app.route("/hello-world", methods=["GET"])
         def helloWorld():
             return jsonify({"success": True, "message": "Hello World"}), 200
