@@ -6,6 +6,7 @@ from models.User import User
 from models.Item import Item
 from models.Game import Game
 from models.Quiz import Quiz
+from models.populate import Populate
 from controllers.UserController import UserController
 from controllers.ItemController import ItemController
 from controllers.ControllerAdvice import ControllerAdvice

@@ -2,7 +2,15 @@ from .db import db, game_list
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from .Quiz import Quiz
+
+
+
+
+
+
+
+
+
 class Game(db.Model):
     __tablename__ = "game"
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
@@ -27,6 +35,7 @@ class Game(db.Model):
         return game_list
     @staticmethod
     def seed_game(Quiz):
+    def seed_game(Quiz):
         if not Game.query.first():
             games = [
                 Game(correct_answer=0, type=0),
@@ -36,6 +45,7 @@ class Game(db.Model):
                 Game(correct_answer=3, type=0),
                 Game(correct_answer=2, type=1),
             ]            
+            db.session.add_all(games)
             db.session.add_all(games)
             db.session.commit()
             
