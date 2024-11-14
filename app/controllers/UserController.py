@@ -5,21 +5,20 @@ from service.UserService import UserService
 from uuid import UUID
 import uuid
 from utils.id_converter import id_converter
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 class UserController():
     def init_app(app):
-        @app.before_request
-        def check_auth():
-            routes = ['login', 'register', '/hello-world', '/']
-            if "user_id" not in session and request.endpoint not in routes:
-                abort(500, description="Usuário não está logado")
-
         @app.route("/hello-world", methods=["GET"])
         def helloWorld():
+            logging.info("Controller - Hello World")
             return jsonify({"success": True, "message": "Hello World"}), 200
         
         @app.route("/register", methods=["POST"])
         def register():
+            logging.info("Controller - Registro")
             data = request.get_json()
             username = data.get("username")
             email = data.get("email")
@@ -31,8 +30,9 @@ class UserController():
             result = UserService.register(user)
             return jsonify({"message": f"Usuário cadastrado com sucesso"}), 201
             
-        @app.route("/login", methods=["POST"])
+        @app.route("/logar", methods=["POST"])
         def login():
+            logging.info("Controller - Login")
             data = request.get_json()
             email = data.get("email")
             password = data.get("password")
@@ -42,12 +42,15 @@ class UserController():
         
         @app.route("/user/<string:id>", methods=["GET"])
         def find_user_by_id(id: str):
+            logging.info("Controller - Find By Id")
             user_id = id_converter.convert_id_uuid(id)
             user = UserService.find_user_by_id(user_id)
             return jsonify({"message": "Usuário encontrado com sucesso", "user": user}), 200           
 
         @app.route("/user/<string:id>", methods=["PUT"])
         def update_user(id: str):
+            logging.info("Controller - Update User")
+            
             data = request.get_json()
             username = data.get("username")
             email = data.get("email")
@@ -63,24 +66,31 @@ class UserController():
             
         @app.route("/user/<string:id>", methods=["DELETE"])
         def delete_user(id: str):
+            logging.info("Controller - Delete User")
             user_id = id_converter.convert_id_uuid(id)
             UserService.delete(user_id)
             return jsonify({"message": "Usuário deletado com sucesso"}), 204
         
         @app.route("/user/<string:id>/recents", methods=["GET"])
         def find_user_history(id: str):
+            logging.info("Controller - Find By User History")
+            
             user_id = id_converter.convert_id_uuid(id)
             history = UserService.find_user_history(user_id)
             return jsonify({"message": "Histórico de itens encontrados com sucesso", "history": history}), 200
     
         @app.route("/user/<string:id>/items", methods = ["GET"])
         def my_items(id: str ):
+            logging.info("Controller - Find user itens")
+            
             user_id = id_converter.convert_id_uuid(id)
             userItems = UserService.find_user_items(user_id)
             return jsonify({"message": "Itens encontrados com sucesso", "items": userItems})
         
         @app.route("/user/<string:id>/more_viewed", methods = ["GET"])
         def find_more_view_by_user(id: str):
+            logging.info("Controller - Find more viewed itens")
+            
             user_id = id_converter.convert_id_uuid(id)
             more_view_items = UserService.find_more_view_items(user_id)
             return jsonify({"message": "Items mais vistos encontrados", "items": more_view_items})

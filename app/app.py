@@ -38,6 +38,6 @@ with app.app_context():
     db.create_all()
     User.seed_user()
     Quiz.seed_quiz()
-    Item.seed_item()
-    Game.seed_game()
+    Game.seed_game(Quiz)
+    Item.seed_item(Game)
     logger.info("Connectado ao banco")
