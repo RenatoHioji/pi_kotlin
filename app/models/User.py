@@ -31,12 +31,22 @@ class User(db.Model):
             "email": self.email,
             "my_items": self.my_items
         }
+    def serialize(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email,
+        }
     def get_items(self):
         list_items= []
         for item in self.my_items:
             list_items.append(item.serialize())
         return list_items
-    
+    def serialize_list(usuarios):
+        list_user = []
+        for usuario in usuarios:
+            list_user.append(usuario.serialize())
+        return list_user
     @staticmethod
     def seed_user():
         if not User.query.first():

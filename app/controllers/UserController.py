@@ -11,6 +11,11 @@ logging.basicConfig(level=logging.DEBUG)
 
 class UserController():
     def init_app(app):
+        @app.route("/usuarios", methods=["GET"])
+        def buscarTodosUsuarios():
+            logging.info("CONTROLLER - Buscando usuários")
+            usuarios = User.query.all()
+            return jsonify({"message": "Usuários encontrados com sucesso", "usuarios": User.serialize_list(usuarios)})
         @app.route("/hello-world", methods=["GET"])
         def helloWorld():
             logging.info("Controller - Hello World")
