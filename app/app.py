@@ -17,7 +17,7 @@ from utils.s3 import bucket_pi_accessing
 
 load_dotenv()
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:8081"}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 dir = os.path.abspath(os.path.dirname(__file__))
 
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
