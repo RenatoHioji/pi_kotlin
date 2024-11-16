@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.DEBUG)
 class UserService():
     def register(user: User):
         logging.info("Service - Register")
-        UserRepository.register(user)
+        return UserRepository.register(user)
     def login(user: User):
         logging.info("Service - Login")
         userRegistered = UserRepository.find_by_email(user.email)

@@ -33,7 +33,7 @@ class UserController():
             hashed_password = hash_password(password)
             user = User(username, email, hashed_password)
             result = UserService.register(user)
-            return jsonify({"message": f"Usuário cadastrado com sucesso"}), 201
+            return jsonify({"message": f"Usuário cadastrado com sucesso", "user_id": result.id}), 201
             
         @app.route("/logar", methods=["POST"])
         def login():
