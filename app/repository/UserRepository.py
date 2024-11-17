@@ -68,3 +68,4 @@ class UserRepository():
             return top_items
         except SQLAlchemyError as e:
             abort(500, description = f"Erro na query: {e}")
+    

@@ -66,7 +66,7 @@ class UserService():
         more_view = UserRepository.find_more_view_items(user_id)
         items = []
         for object in more_view:
-            items.append(UserRepository.find_user_by_id(object[0]).serialize())
+            items.append(ItemRepository.find_by_id(object[0]).serialize())
         if not more_view:
             abort(404, "Usuário ainda não viu nenhum item")
         return items
