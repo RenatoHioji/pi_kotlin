@@ -5,11 +5,11 @@ db = SQLAlchemy()
 
 user_history = db.Table("history", 
                         db.Column("history_id", UUID(as_uuid=True), primary_key = True, default=uuid.uuid4),
-                        db.Column("user_id", UUID(as_uuid=True), db.ForeignKey('app_user.id'), unique=False),
+                        db.Column("user_id", UUID(as_uuid=True), db.ForeignKey('usuario.id'), unique=False),
                         db.Column("item_id", UUID(as_uuid=True), db.ForeignKey('item.id'), unique=False),
                         db.Column("timestamp", db.DateTime, default=db.func.current_timestamp()))
 
-table_game_items = db.Table("game_items", 
+game_items = db.Table("game_items", 
                         db.Column("game_items_id", UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
                         db.Column("item_id", UUID(as_uuid=True), db.ForeignKey("item.id"), nullable=False),
                         db.Column("game_id", UUID(as_uuid=True), db.ForeignKey("game.id"), nullable=False))

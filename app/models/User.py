@@ -5,7 +5,7 @@ from .db import db, user_history
 from sqlalchemy.orm import relationship
 
 class User(db.Model):
-    __tablename__ = 'app_user'
+    __tablename__ = 'usuario'
     
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     username = db.Column(db.String(255), unique=True, nullable=False)
@@ -31,16 +31,26 @@ class User(db.Model):
             "email": self.email,
             "my_items": self.my_items
         }
+    def serialize(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email,
+        }
     def get_items(self):
         list_items= []
         for item in self.my_items:
             list_items.append(item.serialize())
         return list_items
-    
+    def serialize_list(usuarios):
+        list_user = []
+        for usuario in usuarios:
+            list_user.append(usuario.serialize())
+        return list_user
     @staticmethod
     def seed_user():
         if not User.query.first():
-            user = User(username="teste", email="admin@example.com", password=generate_password_hash("admin", method="scrypt"))
+            user = User(username="teste", email="teste@example.com", password=generate_password_hash("teste", method="scrypt"))
             db.session.add(user)
             db.session.commit()
         else:

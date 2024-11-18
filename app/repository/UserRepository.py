@@ -11,7 +11,7 @@ class UserRepository():
         try:
             db.session.add(user)
             db.session.commit()
-            return user
+            return User.query.filter_by(email = user.email).first()
         except IntegrityError as e:
             db.session.rollback() 
             abort(500, description = "Usuário já cadastrado")
@@ -68,3 +68,4 @@ class UserRepository():
             return top_items
         except SQLAlchemyError as e:
             abort(500, description = f"Erro na query: {e}")
+    
