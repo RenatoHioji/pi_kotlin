@@ -30,9 +30,9 @@ class Quiz(db.Model):
     def seed_quiz():
         if not Quiz.query.first():
             quizzes = [
-                Quiz(nivel = 0),
                 Quiz(nivel = 1),
-                Quiz(nivel = 2)
+                Quiz(nivel = 2),
+                Quiz(nivel = 3)
             ]           
             for quiz in quizzes:
                 db.session.add(quiz)

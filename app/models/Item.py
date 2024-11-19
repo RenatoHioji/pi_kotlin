@@ -105,7 +105,7 @@ class Item(db.Model):
                 {'game_id': games[3].id, 'item_id': items[10].id},
                 {'game_id': games[4].id, 'item_id': items[11].id},
                 {'game_id': games[4].id, 'item_id': items[6].id},
-                {'game_id': games[4].id, 'item_id': items[11].id},
+                {'game_id': games[4].id, 'item_id': items[19].id},
                 {'game_id': games[4].id, 'item_id': pato.id},
                 {'game_id': games[5].id, 'item_id': items[22].id},
                 {'game_id': games[5].id, 'item_id': items[23].id},
