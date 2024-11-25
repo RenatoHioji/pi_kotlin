@@ -15,14 +15,14 @@ class ItemService():
         items = ItemRepository.find_all()
         return Item.serialize_list(items)
     
-    def save_item_to_user(self, name, syllables, img, video, category, subcategory, user_id):
-        image_url, video_url =self.file_verification(img, video)
-        item = Item(name, syllables, image_url, video_url, category, subcategory, user_id)
+    def save_item_to_user(self, name, syllables, img, video, audio, category, subcategory, user_id):
+        image_url, video_url, audio_url =self.file_verification(img, video, audio)
+        item = Item(name, syllables, image_url, video_url, audio_url, category, subcategory, user_id)
         return ItemRepository.save(item)
     
-    def save(self, name, syllables, img, video, category, subcategory):
+    def save(self, name, syllables, img, video, audio, category, subcategory):
         image_url, video_url =self.file_verification(img, video)
-        item = Item(name, syllables, image_url, video_url, category, subcategory)
+        item = Item(name, syllables, image_url, video_url, audio_url, category, subcategory)
         return ItemRepository.save(item)
     
     def delete(self, id:UUID):
@@ -49,16 +49,18 @@ class ItemService():
 
         return Item.serialize_list(items)
     
-    def update(self, id, name, syllables, img, video, category, subcategory):
+    def update(self, id, name, syllables, img, video, audio, category, subcategory):
         old_item = ItemRepository.find_by_id(id)
         bucket_pi_accessing.detele_file(old_item.img)
         bucket_pi_accessing.detele_file(old_item.video)
-        image_url, video_url = self.file_verification(img, video)
+        bucket_pi_processing.delete_file(old_item.audio)
+        image_url, video_url, audio_url = self.file_verification(img, video, audio)
         
         old_item.name = name
         old_item.syllables = syllables
         old_item.img = image_url
         old_item.video = video_url
+        old_item.audio = audio_url
         old_item.category = category
         old_item.subcategory = subcategory
         
@@ -67,11 +69,12 @@ class ItemService():
         return old_item.serialize()
         
         
-    def file_verification(self, image, video):
-        if self.allowed_file(image.filename) and self.allowed_file(video.filename):
+    def file_verification(self, image, video, audio):
+        if self.allowed_file(image.filename) and self.allowed_file(video.filename) and self.allowed_file(audio.filename):
             image_name = self.convert_to_webp_and_save(image, secure_filename(image.filename))
             video_name = self.upload_video(video, secure_filename(video.filename))
-            return image_name, video_name
+            audio_name = self.upload_video(audio, secure_filename(audio.filename))
+            return image_name, video_name, audio_name
         else:
             abort(400, description="Video ou imagem foi enviado com uma extensão proibída")
             
@@ -102,4 +105,3 @@ class ItemService():
         buffer.seek(0)
         bucket_pi_accessing.save_file(buffer, video_filename)
         return video_filename
-                

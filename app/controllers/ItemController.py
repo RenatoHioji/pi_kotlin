@@ -30,7 +30,7 @@ class ItemController():
             if not data["category"] and data["subcategory"]:
                 abort(400, description="Possui subcategoria, porém não há categoria")
                 
-            item_service.save_item_to_user(data["name"], data["syllables"], files["image"], files["video"], data["category"], data["subcategory"], user_id)
+            item_service.save_item_to_user(data["name"], data["syllables"], files["image"], files["video"],files["audio"], data["category"], data["subcategory"], user_id)
             return jsonify({"message" : "Item salvo com sucesso!"}), 201    
         @app.route("/item", methods=["POST"])
         def save():
@@ -43,7 +43,7 @@ class ItemController():
             if not data["category"] and data["subcategory"]:
                 abort(400, description="Possui subcategoria, porém não há categoria")
                 
-            item_service.save(data["name"], data["syllables"], files["image"], files["video"], data["category"], data["subcategory"])
+            item_service.save(data["name"], data["syllables"], files["image"], files["video"], files["audio"], data["category"], data["subcategory"])
             return jsonify({"message" : "Item salvo com sucesso!"}), 201
         
         @app.route("/item/<string:id>", methods=["DELETE"])
@@ -71,7 +71,7 @@ class ItemController():
             if not data["category"] and data["subcategory"]:
                 abort(400, description="Possui subcategoria, porém não há categoria")
                 
-            item_updated = item_service.update(item_id, data["name"], data["syllables"], files["image"], files["video"], data["category"], data["subcategory"])
+            item_updated = item_service.update(item_id, data["name"], data["syllables"], files["image"], files["video"], files["audio"], data["category"], data["subcategory"])
             
             return jsonify({"message": "Item atualizado com sucesso", "item": item_updated})
         
