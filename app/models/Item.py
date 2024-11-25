@@ -50,7 +50,7 @@ class Item(db.Model):
         if not Item.query.first():
             items = [
                 Item(name="Eu", syllables="Eu", img="eu.webp", video="eu.mp4", audio="eu.mp3", category="pessoa", subcategory="pronomes"),
-                Item(name="Você", syllables="Vo-cê", img="voce.webp", video="voce.mp4", audio="voce.mp3" category="pessoa", subcategory="pronomes"),
+                Item(name="Você", syllables="Vo-cê", img="voce.webp", video="voce.mp4", audio="voce.mp3", category="pessoa", subcategory="pronomes"),
                 Item(name="Amigo", syllables="A-mi-go", img="amigo.webp", video="amigo.mp4",audio="amigo.mp3", category="pessoa", subcategory="conhecido"),
                 Item(name="Comer", syllables="Co-mer", img="comer.webp", video="comer.mp4",audio="comer.mp3", category="acao", subcategory="verbos"),
                 Item(name="Beber", syllables="Be-ber", img="beber.webp", video="beber.mp4",audio="beber.mp3", category="acao", subcategory="verbos"),
