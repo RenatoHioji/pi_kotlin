@@ -1,8 +1,14 @@
 from flask import request, jsonify, abort, session
 from service.ItemService import ItemService
 import uuid
+import logging
+
 from utils.id_converter import id_converter
+
+logging.basicConfig(level=logging.DEBUG)
+
 class ItemController():
+    
     def init_app(app):
         item_service = ItemService()
         @app.route("/item", methods = ["GET"])
@@ -12,12 +18,23 @@ class ItemController():
             
             items = ItemService.find_by_params(category, subcategory)
             return jsonify({"message": "Itens encontrados com sucesso", "items": items})
-        
+        @app.route("/teste", methods=["POST"])
+        def teste():
+            data = request.form
+            logging.info("TESTE - ", data["name"])
+            logging.info("Categoria - ", data["category"])
+            logging.info("Subcategoria - ", data["subcategory"])
+            logging.info("Sílabas - ", data["syllables"])
+            logging.info("Image - ", data["image"])
+            logging.info("Audio - ", data["audio"])
+            logging.info("Video - ", data["video"])
+            return jsonify({"message": "Concluído"}), 200
+            
+                
         @app.route("/items", methods=["GET"])
         def find_all():
             items = ItemService.find_all()
             return jsonify({"message": "Itens encontrados com sucesso", "items": items}), 200
-
         @app.route("/user/<string:id>/item", methods=["POST"])
         def save_item_to_user(id: str):
             user_id = id_converter.convert_id_uuid(id)
