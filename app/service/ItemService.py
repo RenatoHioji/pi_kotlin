@@ -9,6 +9,7 @@ from flask import abort
 from utils.s3 import bucket_pi_accessing
 from models.Item import Item
 import io
+from utils.file_converter import FileConverter
 
 class ItemService():
     def find_all():
@@ -16,6 +17,9 @@ class ItemService():
         return Item.serialize_list(items)
     
     def save_item_to_user(self, name, syllables, img, video, audio, category, subcategory, user_id):
+        converted_img = FileConverter.convert_blob_to_image(image)
+        converted_audio = FileConverter.convert_blob_to_audio(audio)
+        converted_video = FileConverter.convert_blob_to_mp4(video, video_name)
         image_url, video_url, audio_url =self.file_verification(img, video, audio)
         item = Item(name, syllables, image_url, video_url, audio_url, category, subcategory, user_id)
         return ItemRepository.save(item)
