@@ -21,7 +21,7 @@ class ItemService():
         return ItemRepository.save(item)
     
     def save(self, name, syllables, img, video, audio, category, subcategory):
-        image_url, video_url =self.file_verification(img, video)
+        image_url, video_url, audio_url =self.file_verification(img, video, audio)
         item = Item(name, syllables, image_url, video_url, audio_url, category, subcategory)
         return ItemRepository.save(item)
     
@@ -53,7 +53,7 @@ class ItemService():
         old_item = ItemRepository.find_by_id(id)
         bucket_pi_accessing.detele_file(old_item.img)
         bucket_pi_accessing.detele_file(old_item.video)
-        bucket_pi_processing.delete_file(old_item.audio)
+        bucket_pi_accessing.delete_file(old_item.audio)
         image_url, video_url, audio_url = self.file_verification(img, video, audio)
         
         old_item.name = name
