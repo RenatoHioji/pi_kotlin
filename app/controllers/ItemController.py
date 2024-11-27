@@ -2,7 +2,7 @@ from flask import request, jsonify, abort, session
 from service.ItemService import ItemService
 import uuid
 import logging
-
+from utils.verification import Verificator
 from utils.id_converter import id_converter
 
 logging.basicConfig(level=logging.DEBUG)
@@ -25,26 +25,15 @@ class ItemController():
         def save_item_to_user(id: str):
             user_id = id_converter.convert_id_uuid(id)
             data = request.form
-            if not data["name"] or not data["syllables"]:
-                abort(400, description="Um dos dados não foi enviado para a criação do item")
-            if not data['image'] or not data['video']:
-                abort(400, description="Imagem ou video não enviados")
-            if not data["category"] and data["subcategory"]:
-                abort(400, description="Possui subcategoria, porém não há categoria")
-                
-            item_service.save_item_to_user(data["name"], data["syllables"], data["image"], data["video"],data["audio"], data["category"], data["subcategory"], user_id)
+            Verificator.verify(data)
+            item_service.save_item_to_user(data["name"], data["syllables"], data["image"], data["video"], data["videoName"],data["audio"], data["category"], data["subcategory"], user_id)
             return jsonify({"message" : "Item salvo com sucesso!"}), 201    
         @app.route("/item", methods=["POST"])
         def save():
             data = request.form
-            if not data["name"] or not data["syllables"]:
-                abort(400, description="Um dos dados não foi enviado para a criação do item")
-            if not data['image'] or not data['video']:
-                abort(400, description="Imagem ou video não enviados")
-            if not data["category"] and data["subcategory"]:
-                abort(400, description="Possui subcategoria, porém não há categoria")
+            Verificator.verify(data)
                 
-            item_service.save(data["name"], data["syllables"], data["image"], data["video"], data["audio"], data["category"], data["subcategory"])
+            item_service.save(data["name"], data["syllables"], data["image"], data["video"], data["videoName"], data["audio"], data["category"], data["subcategory"])
             return jsonify({"message" : "Item salvo com sucesso!"}), 201
         
         @app.route("/item/<string:id>", methods=["DELETE"])
@@ -63,15 +52,8 @@ class ItemController():
         def update(id: str):
             data = request.form
             item_id = id_converter.convert_id_uuid(id)
-            
-            if not data["name"] or not data["syllables"]:
-                abort(400, description="Um dos dados não foi enviado para a criação do item")
-            if not data['image'] or not data['video']:
-                abort(400, description="Imagem ou video não enviados")
-            if not data["category"] and data["subcategory"]:
-                abort(400, description="Possui subcategoria, porém não há categoria")
-                
-            item_updated = item_service.update(item_id, data["name"], data["syllables"], data["image"], data["video"], data["audio"], data["category"], data["subcategory"])
+            Verificator.verify(data)
+            item_updated = item_service.update(item_id, data["name"], data["syllables"], data["image"], data["video"], data["videoName"], data["audio"], data["category"], data["subcategory"])
             
             return jsonify({"message": "Item atualizado com sucesso", "item": item_updated})
         
